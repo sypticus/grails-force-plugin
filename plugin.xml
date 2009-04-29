@@ -1,0 +1,14 @@
+<plugin name='salesforce' version='0.1'>
+  <author>Zenon Rawley</author>
+  <authorEmail>zenon.rawley@riptidesoftware.com</authorEmail>
+  <title>Salesforce.com Plugin</title>
+  <description>This plugin can be used for clean integration into Salesfore.com and Force.com platform from within Grails 1.0.4.
+</description>
+  <documentation>http://grails.org/Salesforce+Plugin</documentation>
+  <resources>
+    <resource>DataSource</resource>
+    <resource>UrlMappings</resource>
+    <resource>SalesForceBaseService</resource>
+    <resource>SalesForceCodeGenService</resource>
+  </resources>
+</plugin>

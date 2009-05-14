@@ -127,17 +127,15 @@ class SalesForceCodeGenService extends SalesForceBaseService implements java.io.
 				
 				 text = text + "\n\n"
 			   text = text + "public String toString() {\n"
-			   text = text + "return "
+			   text = text + "def stringVal = \"\"\n"
 			    def val = 0
 			   	fieldNames.each { field ->
-					    if (val == (fieldNames.size()-1)){
-							   text = text + "'" + field + ":' + this." + field + "\n"
-							 } else {
-								 text = text + "'" + field + ":' + this." + field + " + '\\n' + \n"
-							 }
+              text = text + "stringVal = stringVal + "
+							text = text + "'" + field + ":' + this." + field + " + '\\n' \n"
 							val++
 						}
-				text = text + "}\n"
+        text = text + "return stringVal\n"
+        text = text + "}\n"
 				
 		   text = text + "\n\n}\n"
 			

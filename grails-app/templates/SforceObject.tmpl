@@ -1,0 +1,131 @@
+/**
+ * Auto-generated class by Salesforce Grails plugin.
+ * Riptide Force.
+ *
+ * Represents the ${TYPE_NAME} Salesforce object.
+ */
+package ${PACKAGE}
+
+import com.sforce.soap.partner.*
+import com.sforce.soap.partner.sobject.SObject
+import org.apache.axiom.om.*
+import org.apache.axiom.om.util.Base64
+import org.apache.axis2.databinding.utils.ConverterUtil
+
+class ${TYPE_NAME} {
+
+<%
+for( field in TYPE_DESC.getFields() ) {
+
+    String fieldType
+
+    // type translation
+    switch( field.getType() ) {
+        case "string": 
+            fieldType = "String"
+            break
+		case "int":
+            fieldType = "Integer"
+            break
+        case "boolean":
+            fieldType = "Boolean"
+            break
+        case "date":
+            fieldType = "Date"
+            break
+        case "datetime":
+            fieldType = "Calendar"
+            break
+        case "base64":
+            fieldType = "byte[]"
+            break
+        default:
+            fieldType = "String"
+            break
+    }
+
+%>
+    ${fieldType} ${field.getName()}
+<%
+}
+%>
+
+    /*
+     * Builds an account from its Soap implementation.
+     */
+    public static ${TYPE_NAME} build${TYPE_NAME}( SObject so ) {
+
+        OMElement[] elems = so.getExtraElement();
+        def object = new ${TYPE_NAME}()
+
+        for( OMElement elem : elems ) {
+
+            switch( elem.getLocalName() ) {
+<%
+boolean firstField = true
+
+for( field in TYPE_DESC.getFields() ) {
+
+    // type translation into java
+    def fieldTranslationCode
+    switch( field.getType() ) {
+        case "string":
+            fieldTranslationCode = "elem.getText()"
+            break
+		case "int":
+            fieldTranslationCode = "new Integer(elem.getText())"
+            break
+        case "boolean":
+            fieldTranslationCode = "new Boolean(elem.getText())"
+            break
+        case "date":
+            fieldTranslationCode = "ConverterUtil.convertToDate(elem.getText())"
+            break
+        case "datetime":
+            fieldTranslationCode = "ConverterUtil.convertToDateTime(elem.getText())"
+            break
+        case "base64":
+            fieldTranslationCode = "Base64.decode(elem.getText())"
+            break
+        default:
+            fieldTranslationCode = "elem.getText()"
+            break
+    }
+
+%>
+                case '${field.getName()}':
+                    if( elem.getText() != null ) {
+                        object.${field.getName()} = ${fieldTranslationCode}
+                    }
+                    break
+<%
+}
+%>
+            }
+
+        }
+
+        return object
+    }
+
+
+    public SObject toSObject() {
+        // TODO Complete generation of this method.
+        return null
+    }
+
+
+    public String toString() {
+        String strVal = "";
+
+<%
+for( field in TYPE_DESC.getFields() ) {
+%>
+        strVal = strVal + "${field.getName()}: " + ${field.getName()} + "\\n"
+<%
+}
+%>
+        return strVal
+    }
+
+}

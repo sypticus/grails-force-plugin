@@ -1,0 +1,15 @@
+<plugin name='salesforce' version='0.2'>
+  <author>Zenon Rawley / Carlos Munoz</author>
+  <authorEmail>force@riptide.com</authorEmail>
+  <title>Grails Salesforce Plugin</title>
+  <description>Provides connectivity to a salesforce instance.
+</description>
+  <documentation>http://grails.org/Salesforce+Plugin</documentation>
+  <resources>
+    <resource>Config</resource>
+    <resource>DataSource</resource>
+    <resource>UrlMappings</resource>
+    <resource>com.riptide.sforce.SalesForceBaseService</resource>
+    <resource>com.riptide.sforce.SalesForceCodeGenService</resource>
+  </resources>
+</plugin>

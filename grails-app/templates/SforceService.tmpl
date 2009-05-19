@@ -1,0 +1,51 @@
+/**
+ * Auto-generated class by Salesforce Grails plugin.
+ * Riptide Force.
+ *
+ * Base service that provides runtime access to the Salesforce instance.
+ */
+package ${PACKAGE}
+
+import com.sforce.soap.partner.*
+import org.apache.axiom.om.*
+
+class SalesForceService {
+
+    def salesForceBaseService
+
+<%
+for( typeDesc in TYPE_DESCS ) {
+
+    def fields = typeDesc.getFields()
+
+    def fieldStr = ""
+
+    fields.eachWithIndex { field, i ->
+        if(i>0) {
+            fieldStr = fieldStr += ', '
+        }
+        fieldStr = fieldStr + field.getName()
+    }
+%>
+
+    public List<${typeDesc.getName()}> getAll${typeDesc.getName()}s() {
+
+        def list = salesForceBaseService.fetchAll("Select ${fieldStr} from ${typeDesc.getName()}")
+
+        def returnVals = []
+        list.each { object->
+            returnVals.add(Account.buildAccount(object))
+        }
+        return returnVals
+    }
+
+    public ${typeDesc.getName()} get${typeDesc.getName()}ById( String Id ) {
+        id = "'" + id + "'"
+        return ${typeDesc.getName()}.buildAccount( salesForceBaseService.fetch("Select ${fieldStr} from ${typeDesc.getName()} where ID = " + id) )
+    }
+
+<%
+}
+%>
+
+}

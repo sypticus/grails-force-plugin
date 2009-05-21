@@ -9,8 +9,6 @@ public class SObjectConversionUtil {
     public static
     Object convertToJavaType( String str, String javaType ) {
         
-        System.out.println(str + " - " + javaType);
-        
         Object returnVal = null;
         
         if( javaType.equals("Integer") ) {

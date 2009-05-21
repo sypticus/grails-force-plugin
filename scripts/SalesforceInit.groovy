@@ -1,9 +1,9 @@
 grailsHome = ant.project.properties."environment.GRAILS_HOME"
  
-includeTargets << new File("${grailsHome}/scripts/Package.groovy") 
-includeTargets << new File("${grailsHome}/scripts/Bootstrap.groovy")
+includeTargets << grailsScript("Package") 
+includeTargets << grailsScript("Bootstrap")
 
-def salesForceCodeGenService
+salesForceCodeGenService = null
 
 target(initSalesforceService: 'Grabs salesforceService from the application context'){
 	depends( checkVersion, configureProxy, packageApp, classpath)
@@ -11,4 +11,5 @@ target(initSalesforceService: 'Grabs salesforceService from the application cont
 	Thread.currentThread().setContextClassLoader(classLoader)
 	loadApp()
 	configureApp()
+	salesForceCodeGenService = appCtx.getBean("salesForceCodeGenService")
 }

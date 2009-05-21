@@ -8,10 +8,10 @@ package ${PACKAGE}
 
 import com.sforce.soap.partner.*
 import org.apache.axiom.om.*
+import com.riptideforce.sfdc.*
 
-class SalesForceService {
-
-    def salesForceBaseService
+class SalesForceService extends SalesForceBaseService {
+	    
 
 <%
 for( typeDesc in TYPE_DESCS ) {
@@ -30,18 +30,28 @@ for( typeDesc in TYPE_DESCS ) {
 
     public List<${typeDesc.getName()}> getAll${typeDesc.getName()}s() {
 
-        def list = salesForceBaseService.fetchAll("Select ${fieldStr} from ${typeDesc.getName()}")
+        def list = fetchAll("Select ${fieldStr} from ${typeDesc.getName()}")
 
         def returnVals = []
         list.each { object->
-            returnVals.add(Account.buildAccount(object))
+            returnVals.add(${typeDesc.getName()}.build${typeDesc.getName()}(object))
         }
         return returnVals
     }
 
     public ${typeDesc.getName()} get${typeDesc.getName()}ById( String Id ) {
         id = "'" + id + "'"
-        return ${typeDesc.getName()}.buildAccount( salesForceBaseService.fetch("Select ${fieldStr} from ${typeDesc.getName()} where ID = " + id) )
+        return ${typeDesc.getName()}.buildAccount( fetch("Select ${fieldStr} from ${typeDesc.getName()} where ID = " + id) )
+    }
+    
+    public List<${typeDesc.getName()}> getAll${typeDesc.getName()}s( String whereClause ) {
+    	def list = fetchAll("Select ${fieldStr} from ${typeDesc.getName()} where " + whereClause)
+
+        def returnVals = []
+        list.each { object->
+            returnVals.add(${typeDesc.getName()}.build${typeDesc.getName()}(object))
+        }
+        return returnVals
     }
 
 <%

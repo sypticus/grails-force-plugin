@@ -8,8 +8,9 @@
   <resources>
     <resource>Config</resource>
     <resource>DataSource</resource>
+    <resource>spring.resources</resource>
     <resource>UrlMappings</resource>
-    <resource>com.riptide.sforce.SalesForceBaseService</resource>
-    <resource>com.riptide.sforce.SalesForceCodeGenService</resource>
+    <resource>com.riptideforce.sfdc.SalesForceBaseService</resource>
+    <resource>com.riptideforce.sfdc.SalesForceCodeGenService</resource>
   </resources>
 </plugin>

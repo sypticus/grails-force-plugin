@@ -6,8 +6,7 @@ grailsHome = Ant.project.properties."environment.GRAILS_HOME"
 pluginHome = new File("./plugins").listFiles().find { it.name.startsWith('salesforce-')}
 if(pluginHome == null) pluginHome = "."
 
-includeTargets << grailsScript ( "Init" )
-includeTargets << grailsScript ( "SalesforceInit" )
+includeTargets << new File("${pluginHome}/scripts/SalesforceInit.groovy")
 
 target('default': "The description of the script goes here!") {
     cleanSalesforceArtifacts()

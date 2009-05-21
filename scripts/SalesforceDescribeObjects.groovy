@@ -3,9 +3,9 @@ import org.codehaus.groovy.grails.commons.GrailsClassUtils as GCU
 pluginHome = new File("./plugins").listFiles().find { it.name.startsWith('salesforce-')}
 if(pluginHome == null) pluginHome = "."
 
-includeTargets << grailsScript( "SalesforceInit" )
+includeTargets << new File("${pluginHome}/scripts/SalesforceInit.groovy")
 
-target('default': "Describes the Salesforce instance.") {
+target('default': "Describes all Salesforce objects in the instance.") {
     describe()
 }
 

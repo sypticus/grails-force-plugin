@@ -9,12 +9,14 @@ package ${PACKAGE}
 import com.sforce.soap.partner.*
 import com.sforce.soap.partner.sobject.SObject
 import org.apache.axiom.om.*
-import org.apache.axiom.om.util.Base64
-import org.apache.axis2.databinding.utils.ConverterUtil
+import com.riptideforce.sfdc.soap.util.SObjectConversionUtil
 
-class ${TYPE_NAME} {
+class ${TYPE_NAME} implements java.io.Serializable {
 
 <%
+// Field to type map
+def typeMap = [:];
+
 for( field in TYPE_DESC.getFields() ) {
 
     String fieldType
@@ -26,6 +28,9 @@ for( field in TYPE_DESC.getFields() ) {
             break
 		case "int":
             fieldType = "Integer"
+            break
+        case "double":
+            fieldType = "Double"
             break
         case "boolean":
             fieldType = "Boolean"
@@ -43,6 +48,8 @@ for( field in TYPE_DESC.getFields() ) {
             fieldType = "String"
             break
     }
+    
+    typeMap.put(field.getName(), fieldType)
 
 %>
     ${fieldType} ${field.getName()}
@@ -61,41 +68,14 @@ for( field in TYPE_DESC.getFields() ) {
         for( OMElement elem : elems ) {
 
             switch( elem.getLocalName() ) {
+
+
 <%
-boolean firstField = true
-
 for( field in TYPE_DESC.getFields() ) {
-
-    // type translation into java
-    def fieldTranslationCode
-    switch( field.getType() ) {
-        case "string":
-            fieldTranslationCode = "elem.getText()"
-            break
-		case "int":
-            fieldTranslationCode = "new Integer(elem.getText())"
-            break
-        case "boolean":
-            fieldTranslationCode = "new Boolean(elem.getText())"
-            break
-        case "date":
-            fieldTranslationCode = "ConverterUtil.convertToDate(elem.getText())"
-            break
-        case "datetime":
-            fieldTranslationCode = "ConverterUtil.convertToDateTime(elem.getText())"
-            break
-        case "base64":
-            fieldTranslationCode = "Base64.decode(elem.getText())"
-            break
-        default:
-            fieldTranslationCode = "elem.getText()"
-            break
-    }
-
 %>
                 case '${field.getName()}':
                     if( elem.getText() != null ) {
-                        object.${field.getName()} = ${fieldTranslationCode}
+                        object.${field.getName()} = SObjectConversionUtil.convertToJavaType( elem.getText(), "${typeMap.get(field.getName())}" )
                     }
                     break
 <%

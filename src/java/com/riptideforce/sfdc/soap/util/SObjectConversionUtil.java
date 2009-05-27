@@ -1,6 +1,8 @@
 package com.riptideforce.sfdc.soap.util;
 
 
+import java.util.Calendar;
+import java.util.Date;
 import org.apache.axiom.om.util.Base64;
 import org.apache.axis2.databinding.utils.ConverterUtil;
 
@@ -67,6 +69,42 @@ public class SObjectConversionUtil {
         }
         
         return returnVal;
+    }
+
+    public static
+    String convertToString( Object obj ) {
+
+        String retVal = "";
+
+        if( obj == null ) {
+          // Ignore
+        }
+        else if( obj instanceof Integer ) {
+            retVal = ConverterUtil.convertToString( (Integer)obj );
+        }
+        else if( obj instanceof Double ) {
+            retVal = ConverterUtil.convertToString( (Double)obj );
+        }
+        else if( obj instanceof Boolean ) {
+            retVal = ConverterUtil.convertToString( (Boolean)obj );
+        }
+        else if( obj instanceof Date ) {
+            retVal = ConverterUtil.convertToString( (Date)obj );
+        }
+        else if( obj instanceof Calendar ) {
+            retVal = ConverterUtil.convertToString( (Calendar)obj );
+        }
+        else if( obj instanceof String ) {
+            retVal = obj.toString();
+        }
+        else if( obj instanceof byte[] ) {
+            retVal = ConverterUtil.convertToString( (byte[])obj );
+        }
+        else {
+            retVal = obj.toString();
+        }
+
+        return retVal;
     }
 	
 }

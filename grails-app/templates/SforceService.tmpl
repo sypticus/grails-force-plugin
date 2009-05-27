@@ -7,6 +7,7 @@
 package ${PACKAGE}
 
 import com.sforce.soap.partner.*
+import com.sforce.soap.partner.sobject.*
 import org.apache.axiom.om.*
 import com.riptideforce.sfdc.*
 
@@ -52,6 +53,30 @@ for( typeDesc in TYPE_DESCS ) {
             returnVals.add(${typeDesc.getName()}.build${typeDesc.getName()}(object))
         }
         return returnVals
+    }
+
+    public SaveResult[] create${typeDesc.getName()}s( ${typeDesc.getName()} ... objs ) {
+
+        SObject[] sObjs = new SObject[objs.length]
+        int idx = 0;
+
+        objs.each { obj ->
+            sObjs[idx++] = obj.toSObject()
+        }
+
+        return create( sObjs )
+    }
+
+    public SaveResult[] update${typeDesc.getName()}s( ${typeDesc.getName()} ... objs ) {
+
+        SObject[] sObjs = new SObject[objs.length]
+        int idx = 0;
+
+        objs.each { obj ->
+            sObjs[idx++] = obj.toSObject()
+        }
+
+        return update( sObjs )
     }
 
 <%

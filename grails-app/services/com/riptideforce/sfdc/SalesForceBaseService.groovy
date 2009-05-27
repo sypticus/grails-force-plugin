@@ -321,7 +321,7 @@ class SalesForceBaseService implements InitializingBean {
                 return null
             }
         }
-        if (o == null){
+        if (objs == null){
             println "SObject passed for creation was null"
             return null
         }
@@ -373,7 +373,7 @@ class SalesForceBaseService implements InitializingBean {
 
             UpdateResponse updateResp =
                 serviceStub.update( updateParams, sessionHeader, null, null, null, null, null );
-            SaveResult[] saveResults = updateResp.gtResult();
+            SaveResult[] saveResults = updateResp.getResult();
 
             if (saveResults != null){
                 return saveResults;
@@ -393,7 +393,7 @@ class SalesForceBaseService implements InitializingBean {
     /*
      * Deletes a series of SObjects given multiple Ids
      */
-    private DeleteResult[] delete(String ... ids){
+    public DeleteResult[] delete(String ... ids){
 	    if (!this.loggedIn) {
             if (!login()) {
                 return;
@@ -401,6 +401,11 @@ class SalesForceBaseService implements InitializingBean {
         }
 
         Delete deleteParams = new Delete();
+        for( String id : ids ) {
+            ID newId = new ID();
+            newId.setID(id);
+            deleteParams.addIds( newId );
+        }
         DeleteResponse deleteResp =
             serviceStub.delete(deleteParams, sessionHeader, null, null, null, null);
         DeleteResult[] deleteResults = deleteResp.getResult();

@@ -61,7 +61,7 @@ for( typeDesc in TYPE_DESCS ) {
         int idx = 0;
 
         objs.each { obj ->
-            sObjs[idx++] = obj.toSObject()
+            sObjs[idx++] = obj.toNewSObject()
         }
 
         return create( sObjs )

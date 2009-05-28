@@ -14,6 +14,7 @@ class SalesForceBaseService implements InitializingBean {
     def boolean loggedIn
     def SforceServiceStub serviceStub
     def SessionHeader sessionHeader
+    def GetUserInfoResult userInfo
 
 
     void afterPropertiesSet() {
@@ -75,6 +76,31 @@ class SalesForceBaseService implements InitializingBean {
      */
     protected SessionHeader getSessionHeader() {
         return this.sessionHeader
+    }
+
+
+    /*
+     * Returns the user Id from the Salesforce instance
+     */
+    def String getUserId() {
+
+        // Log in if not done before
+        if(!this.loggedIn) {
+            if(!login()) {
+                return null;
+            }
+
+            this.userInfo = null; // Reset the user info
+        }
+
+        // Get the user info if not done yet
+        if( this.userInfo == null ) {
+            GetUserInfo params = new GetUserInfo();
+
+            this.userInfo = serviceStub.getUserInfo(params, this.sessionHeader, null).getResult();
+        }
+
+        return this.userInfo.getUserId().getID();
     }
 
 

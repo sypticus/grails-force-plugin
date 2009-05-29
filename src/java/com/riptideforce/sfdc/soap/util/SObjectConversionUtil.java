@@ -1,8 +1,13 @@
 package com.riptideforce.sfdc.soap.util;
 
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.Vector;
 import org.apache.axiom.om.util.Base64;
 import org.apache.axis2.databinding.utils.ConverterUtil;
 
@@ -64,6 +69,14 @@ public class SObjectConversionUtil {
                 // Ignore
             }
         }
+        else if ( javaType.equals("List") ) {
+            try {
+                returnVal = Arrays.asList( str.split(";") );
+            }
+            catch( Exception ex ) {
+                // Ignore
+            }
+        }
         else {
             returnVal = null;
         }
@@ -99,6 +112,15 @@ public class SObjectConversionUtil {
         }
         else if( obj instanceof byte[] ) {
             retVal = ConverterUtil.convertToString( (byte[])obj );
+        }
+        else if( obj instanceof List ) {
+            List array = (List)obj;
+            for( int i=0; i< array.size(); i++ ) {
+                retVal += array.get(i);
+                if( i < array.size()-1 ) {
+                  retVal += ";";
+                }
+            }
         }
         else {
             retVal = obj.toString();

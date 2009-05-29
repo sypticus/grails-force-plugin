@@ -11,6 +11,7 @@ import com.sforce.soap.partner.sobject.SObject
 import org.apache.axiom.om.*
 import com.riptideforce.sfdc.soap.util.SObjectConversionUtil
 
+
 class ${TYPE_NAME} implements java.io.Serializable {
 
 <%
@@ -44,6 +45,12 @@ for( field in TYPE_DESC.getFields() ) {
         case "base64":
             fieldType = "byte[]"
             break
+        case "picklist":
+            fieldType = "String"
+            break
+        case "multipicklist":
+            fieldType = "List"
+            break
         default:
             fieldType = "String"
             break
@@ -54,6 +61,27 @@ for( field in TYPE_DESC.getFields() ) {
 %>
     ${fieldType} ${field.getName()}
 <%
+}
+%>
+
+<%
+for( field in TYPE_DESC.getFields() ) {
+    if( field.getType().toString() == "picklist"
+        || field.getType().toString() == "multipicklist" ) {
+%>
+    public static String[] get${field.getName()}ValidValues() {
+        def validValues = []
+<%
+        field.getPicklistValues().each { entry ->
+%>
+        validValues << "${entry.getValue()}"
+<%
+        }
+%>
+        return validValues
+    }
+<%
+    }
 }
 %>
 

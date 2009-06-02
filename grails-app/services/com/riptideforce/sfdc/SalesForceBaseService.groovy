@@ -11,15 +11,37 @@ class SalesForceBaseService implements InitializingBean {
 
     def String userName
     def String password
-    def boolean loggedIn
     def SforceServiceStub serviceStub
     def SessionHeader sessionHeader
     def GetUserInfoResult userInfo
+    def long lastLoginTimestamp
+    def long loginThreshold
 
 
     void afterPropertiesSet() {
         this.userName = ConfigurationHolder.config.salesforce.user
         this.password = ConfigurationHolder.config.salesforce.password
+        if( ConfigurationHolder.config.salesforce.loginThreshold ) {
+            this.loginThreshold = ConfigurationHolder.config.salesforce.loginThreshold
+        }
+        else {
+            this.loginThreshold = 3600000
+        }
+    }
+
+    /*
+     * Check if Login is required
+     */
+    protected boolean loginRequired() {
+
+        if( sessionHeader == null ) {
+            return true;
+        }
+        else if( System.currentTimeMillis() - lastLoginTimestamp > this.loginThreshold ) {
+            return true;
+        }
+
+        return false;
     }
 
     /*
@@ -32,6 +54,8 @@ class SalesForceBaseService implements InitializingBean {
         login.setUsername( this.userName );
         login.setPassword( this.password );
 
+        boolean loggedIn = false;
+
         try {
             System.out.println("LOGGING IN...");
             LoginResponse response =
@@ -39,36 +63,36 @@ class SalesForceBaseService implements InitializingBean {
             LoginResult loginResult =
                 response.getResult();
 
-            this.loggedIn = true;
+            // An unsuccesful login should cause a LoginFault and skip this code
+            System.out.println("LOGGED IN SUCCESSFULLY");
+            loggedIn = true;
+            this.lastLoginTimestamp = System.currentTimeMillis();
 
-            if( this.loggedIn ) {
-                System.out.println("LOGGED IN SUCCESSFULLY");
+            // Keep the session header
+            sessionHeader = new SessionHeader();
+            sessionHeader.setSessionId(loginResult.getSessionId());
 
-                // Keep the session header
-                sessionHeader = new SessionHeader();
-                sessionHeader.setSessionId(loginResult.getSessionId());
+            // Reconnect with the new server url and options
+            this.serviceStub = new SforceServiceStub(loginResult.getServerUrl());
 
-                // Reconnect with the new server url
-                this.serviceStub = new SforceServiceStub(loginResult.getServerUrl());
-            }
+            // set configuration options for the stub
+            serviceStub._getServiceClient().getOptions().setManageSession(true);
+            serviceStub._getServiceClient().getOptions().setTimeOutInMilliSeconds(this.loginThreshold);
         }
         catch( InvalidIdFault flt ) {
-            this.loggedIn = false;
             System.out.println("InvalidIdFault caught while attempting to log into SalesForce.");
             System.out.println(flt.getFaultMessage());
         }
         catch( UnexpectedErrorFault flt ) {
-            this.loggedIn = false;
             System.out.println("UnexpectedErrorFault caught while attempting to log into SalesForce.");
             System.out.println(flt.getFaultMessage());
         }
         catch( LoginFault flt ) {
-            this.loggedIn = false;
             System.out.println("LoginFault caught while attempting to log into SalesForce.");
             System.out.println(flt.getFaultMessage());
         }
 
-        return this.loggedIn;
+        return loggedIn;
     }
     
     /*
@@ -85,7 +109,7 @@ class SalesForceBaseService implements InitializingBean {
     def String getUserId() {
 
         // Log in if not done before
-        if(!this.loggedIn) {
+        if(this.loginRequired()) {
             if(!login()) {
                 return null;
             }
@@ -109,7 +133,7 @@ class SalesForceBaseService implements InitializingBean {
      */
     def String[] getObjectNames() {
 
-        if(!this.loggedIn) {
+        if(this.loginRequired()) {
             if(!login()) {
                 return null;
             }
@@ -167,7 +191,7 @@ class SalesForceBaseService implements InitializingBean {
      */
     protected DescribeSObjectResult[] getFieldsForObjectTypes( String[] typeNames ) {
 
-        if(!this.loggedIn) {
+        if(this.loginRequired()) {
             if(!login()) {
                 return null
             }
@@ -263,7 +287,7 @@ class SalesForceBaseService implements InitializingBean {
      */
     public List<SObject> fetchAll(String query){
 
-        if (!this.loggedIn) {
+        if (this.loginRequired()) {
             if (!login()) {
                 return null;
             }
@@ -296,7 +320,7 @@ class SalesForceBaseService implements InitializingBean {
      * the first one is returned.
      */
     protected SObject fetch(String query){
-        if (!this.loggedIn) {
+        if (this.loginRequired()) {
             if (!login()) {
                 return null;
             }
@@ -342,7 +366,7 @@ class SalesForceBaseService implements InitializingBean {
      */
     protected SaveResult[] create(SObject ... objs){
 
-        if (!this.loggedIn) {
+        if (this.loginRequired()) {
             if (!login()) {
                 return null
             }
@@ -385,7 +409,7 @@ class SalesForceBaseService implements InitializingBean {
      */
     protected SaveResult[] update(SObject ... objs){
 
-        if (!this.loggedIn) {
+        if (this.loginRequired()) {
             if (!login()) {
                 return null;
             }
@@ -420,7 +444,7 @@ class SalesForceBaseService implements InitializingBean {
      * Deletes a series of SObjects given multiple Ids
      */
     public DeleteResult[] delete(String ... ids){
-	    if (!this.loggedIn) {
+	    if (this.loginRequired()) {
             if (!login()) {
                 return;
             }

@@ -13,7 +13,7 @@ class SalesForceCodeGenService extends SalesForceBaseService {
 
     def generateCode(String pluginBasedir, String appDir) {
 
-        if (!this.loggedIn) {
+        if (this.loginRequired()) {
             if (!login()) {
                 println "Could not login to Salesforce web service."
                 return;

@@ -1,7 +1,6 @@
 package com.riptideforce.sfdc
 
 import com.sforce.soap.partner.*
-import com.sforce.soap.partner.DescribeSObjectResult
 import org.springframework.beans.factory.InitializingBean
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import com.sforce.soap.partner.sobject.SObject

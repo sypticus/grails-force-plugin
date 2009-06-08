@@ -9,7 +9,10 @@ package ${PACKAGE}
 import com.sforce.soap.partner.*
 import com.sforce.soap.partner.sobject.SObject
 import org.apache.axiom.om.*
+import com.riptideforce.sfdc.metadata.*
 import com.riptideforce.sfdc.soap.util.SObjectConversionUtil
+
+import java.lang.reflect.*
 
 
 class ${TYPE_NAME} implements java.io.Serializable {
@@ -57,8 +60,11 @@ for( field in TYPE_DESC.getFields() ) {
     }
     
     typeMap.put(field.getName(), fieldType)
+    boolean createable = field.getCreateable();
+    boolean updateable = field.getUpdateable();
 
 %>
+    @SalesforceField( name="${field.getName()}", createable=${createable}, updateable=${updateable} )
     ${fieldType} ${field.getName()}
 <%
 }
@@ -73,8 +79,10 @@ for( field in TYPE_DESC.getFields() ) {
         def validValues = []
 <%
         field.getPicklistValues().each { entry ->
+            String value = entry.getValue()
+            value = value.replaceAll("'", "\\\\'");
 %>
-        validValues << "${entry.getValue()}"
+        validValues << '${value}'
 <%
         }
 %>
@@ -95,20 +103,15 @@ for( field in TYPE_DESC.getFields() ) {
 
         for( OMElement elem : elems ) {
 
-            switch( elem.getLocalName() ) {
-
-
-<%
-for( field in TYPE_DESC.getFields() ) {
-%>
-                case '${field.getName()}':
-                    if( elem.getText() != null ) {
-                        object.${field.getName()} = SObjectConversionUtil.convertToJavaType( elem.getText(), "${typeMap.get(field.getName())}" )
-                    }
-                    break
-<%
-}
-%>
+            // invoke the setter if found
+            try {
+                // find the setter and the argument type
+                String type = object.getClass().getDeclaredField(elem.getLocalName()).getType().getName()
+                object."set\${elem.getLocalName()}"(SObjectConversionUtil.convertToJavaType( elem.getText(), type ))
+            }
+            catch(NoSuchMethodException nsmex) {
+                // The plugin classes might be out of date
+                // TODO Log a message to warn
             }
 
         }
@@ -127,27 +130,32 @@ for( field in TYPE_DESC.getFields() ) {
 
         OMFactory fac = OMAbstractFactory.getOMFactory();
 
-<%
-for( field in TYPE_DESC.getFields() ) {
-    if( field.getCreateable() ) {
-%>
-        // if the ${field.getName()} field is null
-        if( this.${field.getName()} == null ) {
-            sObj.addFieldsToNull("${field.getName()}");
-        }
-        // otherwise
-        else {
-            OMElement newElem =
-                fac.createOMElement("${field.getName()}",
-                    fac.createOMNamespace("urn:sobject.partner.soap.sforce.com", "ns2"));
-            newElem.setText( SObjectConversionUtil.convertToString( this.${field.getName()} ) );
-            sObj.addExtraElement( newElem );
-        }
-<%
-    }
-}
-%>
+        // For all declared fields
+        ${TYPE_NAME}.class.getDeclaredFields().each { field ->
+            SalesforceField sfAnnotation = field.getAnnotation(SalesforceField.class)
 
+            if( sfAnnotation != null ) {
+                if( sfAnnotation.createable() ) {
+
+                    // get the value
+                    Object fieldVal = this."get\${field.getName()}"()
+                    String fieldName = field.getName()
+
+                    // if the field is null
+                    if( fieldVal == null ) {
+                        sObj.addFieldsToNull( fieldName );
+                    }
+                    // otherwise
+                    else {
+                        OMElement newElem =
+                            fac.createOMElement(fieldName,
+                                fac.createOMNamespace("urn:sobject.partner.soap.sforce.com", "ns2"));
+                        newElem.setText( SObjectConversionUtil.convertToString( fieldVal ) );
+                        sObj.addExtraElement( newElem );
+                    }
+                }
+            }
+        }
 
         return sObj
     }
@@ -178,26 +186,32 @@ if( idField != null ) {
 
         OMFactory fac = OMAbstractFactory.getOMFactory();
 
-<%
-for( field in TYPE_DESC.getFields() ) {
-    if( field.getUpdateable() ) {
-%>
-        // if the ${field.getName()} field is null
-        if( this.${field.getName()} == null ) {
-            sObj.addFieldsToNull("${field.getName()}");
+        // For all declared fields
+        ${TYPE_NAME}.class.getDeclaredFields().each { field ->
+            SalesforceField sfAnnotation = field.getAnnotation(SalesforceField.class)
+
+            if( sfAnnotation != null ) {
+                if( sfAnnotation.updateable() ) {
+
+                    // get the value
+                    Object fieldVal = this."get\${field.getName()}"()
+                    String fieldName = field.getName()
+
+                    // if the field is null
+                    if( fieldVal == null ) {
+                        sObj.addFieldsToNull( fieldName );
+                    }
+                    // otherwise
+                    else {
+                        OMElement newElem =
+                            fac.createOMElement(fieldName,
+                                fac.createOMNamespace("urn:sobject.partner.soap.sforce.com", "ns2"));
+                        newElem.setText( SObjectConversionUtil.convertToString( fieldVal ) );
+                        sObj.addExtraElement( newElem );
+                    }
+                }
+            }
         }
-        // otherwise
-        else {
-            OMElement newElem =
-                fac.createOMElement("${field.getName()}",
-                    fac.createOMNamespace("urn:sobject.partner.soap.sforce.com", "ns2"));
-            newElem.setText( SObjectConversionUtil.convertToString( this.${field.getName()} ) );
-            sObj.addExtraElement( newElem );
-        }
-<%
-    }
-}
-%>
 
 
         return sObj
@@ -205,15 +219,21 @@ for( field in TYPE_DESC.getFields() ) {
 
 
     public String toString() {
-        String strVal = "";
+        String strVal = "${TYPE_NAME} ---\\n";
 
-<%
-for( field in TYPE_DESC.getFields() ) {
-%>
-        strVal = strVal + "${field.getName()}: " + ${field.getName()} + "\\n"
-<%
-}
-%>
+        // For all annotated fields
+        ${TYPE_NAME}.class.getDeclaredFields().each { field ->
+
+            if( field.getAnnotation(SalesforceField.class) != null ) {
+
+                // get the value
+                Object fieldVal = this."get\${field.getName()}"()
+                String fieldName = field.getName()
+
+                strVal += fieldName + ": " + fieldVal + "\\n"
+
+            }
+        }
         return strVal
     }
 

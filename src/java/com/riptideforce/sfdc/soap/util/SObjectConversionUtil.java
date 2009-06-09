@@ -1,24 +1,27 @@
 package com.riptideforce.sfdc.soap.util;
 
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.StringTokenizer;
-import java.util.Vector;
 import org.apache.axiom.om.util.Base64;
 import org.apache.axis2.databinding.utils.ConverterUtil;
 
 public class SObjectConversionUtil {
 
+    /**
+     * Converts a string to a java type.
+     * @param str The string holding the value to convert
+     * @param javaType The java class to convert to
+     * @return
+     */
     public static
-    Object convertToJavaType( String str, String javaType ) {
-        
+    Object convertToJavaType( String str, Class javaType ) {
+
         Object returnVal = null;
-        
-        if( javaType.equals("Integer") ) {
+
+        if( javaType.equals( Integer.class ) ) {
             try {
                 returnVal =  new Integer(str);
             }
@@ -26,7 +29,7 @@ public class SObjectConversionUtil {
                 // Ignore
             }
         }
-        else if ( javaType.equals("Double") ) {
+        else if ( javaType.equals( Double.class ) ) {
             try {
                 returnVal =  new Double(str);
             }
@@ -34,7 +37,7 @@ public class SObjectConversionUtil {
                 // Ignore
             }
         }
-        else if ( javaType.equals("Boolean") ) {
+        else if ( javaType.equals( Boolean.class ) ) {
             try {
                 returnVal =  new Boolean(str);
             }
@@ -42,7 +45,7 @@ public class SObjectConversionUtil {
                 // Ignore
             }
         }
-        else if ( javaType.equals("Date") ) {
+        else if ( javaType.equals( Date.class ) ) {
             try {
                 returnVal =  ConverterUtil.convertToDate(str);
             }
@@ -50,7 +53,7 @@ public class SObjectConversionUtil {
                 // Ignore
             }
         }
-        else if ( javaType.equals("Calendar") ) {
+        else if ( javaType.equals( Calendar.class ) ) {
             try {
                 returnVal =  ConverterUtil.convertToDateTime(str);
             }
@@ -58,10 +61,10 @@ public class SObjectConversionUtil {
                 // Ignore
             }
         }
-        else if ( javaType.equals("String") ) {
+        else if ( javaType.equals( String.class ) ) {
             returnVal = str;
         }
-        else if ( javaType.equals("byte[]") ) {
+        else if ( javaType.equals( byte[].class ) ) {
             try {
                 returnVal =  Base64.decode(str);
             }
@@ -69,7 +72,7 @@ public class SObjectConversionUtil {
                 // Ignore
             }
         }
-        else if ( javaType.equals("List") ) {
+        else if ( javaType.equals( List.class ) ) {
             try {
                 returnVal = Arrays.asList( str.split(";") );
             }
@@ -80,10 +83,16 @@ public class SObjectConversionUtil {
         else {
             returnVal = null;
         }
-        
+
         return returnVal;
     }
 
+    /**
+     * Converts a java object to an SObject accepted string
+     * @param obj The java object to converted
+     * @return A string representation of the object's value that can be
+     * used as an sObject field value.
+     */
     public static
     String convertToString( Object obj ) {
 
@@ -128,5 +137,22 @@ public class SObjectConversionUtil {
 
         return retVal;
     }
-	
+
+
+    public static
+    String getDynamicSetterForField( String fieldName ) {
+
+        fieldName = fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+
+        return "set" + fieldName;
+    }
+
+
+    public static
+    String getDynamicGetterForField( String fieldName ) {
+        fieldName = fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+
+        return "get" + fieldName;
+    }
+
 }

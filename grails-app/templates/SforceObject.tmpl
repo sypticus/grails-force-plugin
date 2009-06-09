@@ -27,7 +27,7 @@ for( field in TYPE_DESC.getFields() ) {
 
     // type translation
     switch( field.getType() ) {
-        case "string": 
+        case "string":
             fieldType = "String"
             break
 		case "int":
@@ -58,7 +58,7 @@ for( field in TYPE_DESC.getFields() ) {
             fieldType = "String"
             break
     }
-    
+
     typeMap.put(field.getName(), fieldType)
     boolean createable = field.getCreateable();
     boolean updateable = field.getUpdateable();
@@ -106,8 +106,9 @@ for( field in TYPE_DESC.getFields() ) {
             // invoke the setter if found
             try {
                 // find the setter and the argument type
-                String type = object.getClass().getDeclaredField(elem.getLocalName()).getType().getName()
-                object."set\${elem.getLocalName()}"(SObjectConversionUtil.convertToJavaType( elem.getText(), type ))
+                Class type = object.getClass().getDeclaredField(elem.getLocalName()).getType()
+                String setter = SObjectConversionUtil.getDynamicSetterForField(elem.getLocalName());
+                object."\${setter}"(SObjectConversionUtil.convertToJavaType( elem.getText(), type ))
             }
             catch(NoSuchMethodException nsmex) {
                 // The plugin classes might be out of date
@@ -137,8 +138,10 @@ for( field in TYPE_DESC.getFields() ) {
             if( sfAnnotation != null ) {
                 if( sfAnnotation.createable() ) {
 
+                    String getter = SObjectConversionUtil.getDynamicGetterForField(field.getName());
+
                     // get the value
-                    Object fieldVal = this."get\${field.getName()}"()
+                    Object fieldVal = this."\${getter}"()
                     String fieldName = field.getName()
 
                     // if the field is null
@@ -193,8 +196,10 @@ if( idField != null ) {
             if( sfAnnotation != null ) {
                 if( sfAnnotation.updateable() ) {
 
+                    String getter = SObjectConversionUtil.getDynamicGetterForField(field.getName());
+
                     // get the value
-                    Object fieldVal = this."get\${field.getName()}"()
+                    Object fieldVal = this."\${getter}"()
                     String fieldName = field.getName()
 
                     // if the field is null
@@ -226,8 +231,10 @@ if( idField != null ) {
 
             if( field.getAnnotation(SalesforceField.class) != null ) {
 
+                String getter = SObjectConversionUtil.getDynamicGetterForField(field.getName());
+
                 // get the value
-                Object fieldVal = this."get\${field.getName()}"()
+                Object fieldVal = this."\${getter}"()
                 String fieldName = field.getName()
 
                 strVal += fieldName + ": " + fieldVal + "\\n"

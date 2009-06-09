@@ -32,37 +32,9 @@ class SalesForceCodeGenService extends SalesForceBaseService {
             pkg = ConfigurationHolder.config.salesforce.codegen.pkg
         }
         println "package used: " + pkg
-        
-        // Generate the Base Service
-        def serviceTemplateFile = new File("${pluginBasedir}${File.separator}grails-app${File.separator}templates"
-                + File.separator + "SforceService.tmpl")
-        def serviceBinding = [PACKAGE: pkg,
-                              TYPE_DESCS: objectDescs ]
+
+        // Generation Engine
         def engine = new SimpleTemplateEngine()
-        def serviceTemplate = engine.createTemplate(serviceTemplateFile).make(serviceBinding)
-
-        String serviceClassName = pluginBasedir + File.separator + "grails-app" +
-                File.separator + "services" + File.separator + pkg.replace('.' as char, File.separatorChar) +
-                File.separator + "SalesForceService.groovy"
-        System.out.println("Generating: " + serviceClassName)
-        // print the file
-        def serviceFile = new File(serviceClassName)
-        
-        try {
-            // create the new file if it does not exist
-            if( !serviceFile.exists() ) {
-                serviceFile.getParentFile().mkdirs()
-                serviceFile.createNewFile()
-            }
-            serviceFile.withPrintWriter{ pwriter ->
-                pwriter.println serviceTemplate.toString()
-            }
-        }
-        catch( Exception ex ) {
-            System.out.println("Error generating file: " + ex.getMessage())
-        }
-
-
 
         // Generate a class file for each object
         for( DescribeSObjectResult typeDesc : objectDescs ) {
@@ -113,21 +85,6 @@ class SalesForceCodeGenService extends SalesForceBaseService {
         String pkg = DEFAULT_PKG
         if( ConfigurationHolder.config.salesforce.codegen.pkg ) {
             pkg = ConfigurationHolder.config.salesforce.codegen.pkg
-        }
-
-        // Delete the Service class
-        String serviceClassName = pluginBasedir + File.separator + "grails-app" +
-                File.separator + "services" + File.separator + pkg.replace('.' as char, File.separatorChar) +
-                File.separator + "SalesForceService.groovy"
-
-        File serviceFile = new File(serviceClassName)
-        if( serviceFile.exists() ) {
-            try {
-                serviceFile.delete()
-            }
-            catch( Exception ex ) {
-                println "Could not delete service file. Reason: " + ex.getMessage()
-            }
         }
 
         // Delete every file under the generated salesforce package

@@ -1,5 +1,5 @@
 class SalesforceGrailsPlugin {
-    def version = "0.2.1"
+    def version = "0.3"
     def dependsOn = [:]
 
     // TODO Fill in these fields

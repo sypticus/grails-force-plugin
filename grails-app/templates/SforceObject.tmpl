@@ -14,7 +14,7 @@ import com.riptideforce.sfdc.soap.util.SObjectConversionUtil
 
 import java.lang.reflect.*
 
-
+@SalesforceObject(name="${TYPE_NAME}")
 class ${TYPE_NAME} implements java.io.Serializable {
 
 <%
@@ -62,9 +62,10 @@ for( field in TYPE_DESC.getFields() ) {
     typeMap.put(field.getName(), fieldType)
     boolean createable = field.getCreateable();
     boolean updateable = field.getUpdateable();
+    boolean isId = (field.getName().equals("Id"));
 
 %>
-    @SalesforceField( name="${field.getName()}", createable=${createable}, updateable=${updateable} )
+    @SalesforceField( name="${field.getName()}", createable=${createable}, updateable=${updateable}, isId=${isId} )
     ${fieldType} ${field.getName()}
 <%
 }
@@ -92,135 +93,6 @@ for( field in TYPE_DESC.getFields() ) {
     }
 }
 %>
-
-    /*
-     * Builds an account from its Soap implementation.
-     */
-    public static ${TYPE_NAME} build${TYPE_NAME}( SObject so ) {
-
-        OMElement[] elems = so.getExtraElement();
-        def object = new ${TYPE_NAME}()
-
-        for( OMElement elem : elems ) {
-
-            // invoke the setter if found
-            try {
-                // find the setter and the argument type
-                Class type = object.getClass().getDeclaredField(elem.getLocalName()).getType()
-                String setter = SObjectConversionUtil.getDynamicSetterForField(elem.getLocalName());
-                object."\${setter}"(SObjectConversionUtil.convertToJavaType( elem.getText(), type ))
-            }
-            catch(NoSuchMethodException nsmex) {
-                // The plugin classes might be out of date
-                // TODO Log a message to warn
-            }
-
-        }
-
-        return object
-    }
-
-    /*
-     * Returns an sObject to send to the Salesforce API to create as new.
-     * This object will not work if updating an existing object.
-     */
-    public SObject toNewSObject() {
-
-        SObject sObj = new SObject();
-        sObj.setType("${TYPE_NAME}");
-
-        OMFactory fac = OMAbstractFactory.getOMFactory();
-
-        // For all declared fields
-        ${TYPE_NAME}.class.getDeclaredFields().each { field ->
-            SalesforceField sfAnnotation = field.getAnnotation(SalesforceField.class)
-
-            if( sfAnnotation != null ) {
-                if( sfAnnotation.createable() ) {
-
-                    String getter = SObjectConversionUtil.getDynamicGetterForField(field.getName());
-
-                    // get the value
-                    Object fieldVal = this."\${getter}"()
-                    String fieldName = field.getName()
-
-                    // if the field is null
-                    if( fieldVal == null ) {
-                        sObj.addFieldsToNull( fieldName );
-                    }
-                    // otherwise
-                    else {
-                        OMElement newElem =
-                            fac.createOMElement(fieldName,
-                                fac.createOMNamespace("urn:sobject.partner.soap.sforce.com", "ns2"));
-                        newElem.setText( SObjectConversionUtil.convertToString( fieldVal ) );
-                        sObj.addExtraElement( newElem );
-                    }
-                }
-            }
-        }
-
-        return sObj
-    }
-
-    /*
-     * Returns an sObject to send to the Salesforce API to update.
-     * This object might not work if creating a new object.
-     */
-    public SObject toSObject() {
-
-        SObject sObj = new SObject();
-        sObj.setType("${TYPE_NAME}");
-
-<%
-def idField = TYPE_DESC.getFields().find {it.getName() == 'Id'}
-if( idField != null ) {
-%>
-        // create an Id if this is not a new object
-        if( this.Id != null ) {
-            ID objId = new ID();
-
-            objId.setID( this.Id );
-            sObj.setId( objId );
-        }
-<%
-}
-%>
-
-        OMFactory fac = OMAbstractFactory.getOMFactory();
-
-        // For all declared fields
-        ${TYPE_NAME}.class.getDeclaredFields().each { field ->
-            SalesforceField sfAnnotation = field.getAnnotation(SalesforceField.class)
-
-            if( sfAnnotation != null ) {
-                if( sfAnnotation.updateable() ) {
-
-                    String getter = SObjectConversionUtil.getDynamicGetterForField(field.getName());
-
-                    // get the value
-                    Object fieldVal = this."\${getter}"()
-                    String fieldName = field.getName()
-
-                    // if the field is null
-                    if( fieldVal == null ) {
-                        sObj.addFieldsToNull( fieldName );
-                    }
-                    // otherwise
-                    else {
-                        OMElement newElem =
-                            fac.createOMElement(fieldName,
-                                fac.createOMNamespace("urn:sobject.partner.soap.sforce.com", "ns2"));
-                        newElem.setText( SObjectConversionUtil.convertToString( fieldVal ) );
-                        sObj.addExtraElement( newElem );
-                    }
-                }
-            }
-        }
-
-
-        return sObj
-    }
 
 
     public String toString() {

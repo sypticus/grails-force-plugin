@@ -1,4 +1,4 @@
-<plugin name='salesforce' version='0.2.1'>
+<plugin name='salesforce' version='0.3'>
   <author>Zenon Rawley / Carlos Munoz</author>
   <authorEmail>force@riptide.com</authorEmail>
   <title>Grails Salesforce Plugin</title>
@@ -12,5 +12,6 @@
     <resource>UrlMappings</resource>
     <resource>com.riptideforce.sfdc.SalesForceBaseService</resource>
     <resource>com.riptideforce.sfdc.SalesForceCodeGenService</resource>
+    <resource>com.riptideforce.sfdc.SalesForceService</resource>
   </resources>
 </plugin>

@@ -23,7 +23,7 @@ class SalesForceBaseServiceTests extends GroovyTestCase {
 
 
         // Create
-        SaveResult[] res = salesForceService.createTestObject__cs( tst1 )
+        SaveResult[] res = salesForceService.createObjects( tst1 )
         for( SaveResult r : res ) {
             println r.getSuccess()
             for( Error err : r.getErrors() ) {
@@ -32,8 +32,8 @@ class SalesForceBaseServiceTests extends GroovyTestCase {
         }
     }*/
 
-    void testUpdate() {
-        def objs = salesForceService. getAllTestObject__cs("Name = 'Object 1' OR Name = 'Object 2'")
+    /*void testUpdate() {
+        def objs = salesForceService.getAllObjects(TestObject__c.class, "Name = 'Object 1' OR Name = 'Object 2'")
         TestObject__c[] updatedObjs = new TestObject__c[objs.size()]
 
         objs.eachWithIndex { obj, idx ->
@@ -45,17 +45,17 @@ class SalesForceBaseServiceTests extends GroovyTestCase {
 
         }
 
-        SaveResult[] res = salesForceService.updateTestObject__cs( updatedObjs )
+        SaveResult[] res = salesForceService.updateObjects( updatedObjs )
         for( SaveResult r : res ) {
             println r.getSuccess()
             for( Error err : r.getErrors() ) {
                 println err.getMessage()
             }
         }
-    }
+    }*/
 
-    /*void testDelete() {
-        def objs = salesForceService. getAllTestObject__cs("Name = 'Object 1' OR Name = 'Object 2'")
+    void testDelete() {
+        def objs = salesForceService. getAllObjects(TestObject__c.class, "Name = 'Object 1' OR Name = 'Object 2'")
         String[] idsToRemove = new String[ objs.size() ]
 
         objs.eachWithIndex { obj, idx ->
@@ -70,5 +70,5 @@ class SalesForceBaseServiceTests extends GroovyTestCase {
                 println err.getMessage()
             }
         }
-    }*/
+    }
 }

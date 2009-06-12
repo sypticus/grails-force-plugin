@@ -11,15 +11,15 @@ class SalesForceBaseServiceTests extends GroovyTestCase {
 
 
     /*void testCreate() {
-        TestObject__c tst1 = new TestObject__c()
-        TestObject__c tst2 = new TestObject__c()
+        TestObject tst1 = new TestObject()
+        TestObject tst2 = new TestObject()
 
         tst1.setName('Object 1')
-        tst1.setDescription__c('Descr for object 1')
-        tst1.setCustomDate__c( Calendar.getInstance() )
+        tst1.setDescription('Descr for object 1')
+        tst1.setCustomDate( Calendar.getInstance() )
         tst1.setOwnerId( salesForceService.getUserId() )
-        tst1.setColor__c("Red")
-        tst1.setUses__c(["Home", "Office"])
+        tst1.setColor("Red")
+        tst1.setUses(["Home", "Office"])
 
 
         // Create
@@ -33,13 +33,13 @@ class SalesForceBaseServiceTests extends GroovyTestCase {
     }*/
 
     /*void testUpdate() {
-        def objs = salesForceService.getAllObjects(TestObject__c.class, "Name = 'Object 1' OR Name = 'Object 2'")
-        TestObject__c[] updatedObjs = new TestObject__c[objs.size()]
+        def objs = salesForceService.getAllObjects(TestObject.class, "Name = 'Object 1' OR Name = 'Object 2'")
+        TestObject[] updatedObjs = new TestObject[objs.size()]
 
         objs.eachWithIndex { obj, idx ->
-            obj.setDescription__c( obj.getDescription__c() + ' Modified' )
-            obj.setColor__c("Yellow")
-            obj.setUses__c(null)
+            obj.setDescription( obj.getDescription() + ' Modified' )
+            obj.setColor("Yellow")
+            obj.setUses(null)
 
             updatedObjs[idx] = obj
 
@@ -55,7 +55,7 @@ class SalesForceBaseServiceTests extends GroovyTestCase {
     }*/
 
     void testDelete() {
-        def objs = salesForceService. getAllObjects(TestObject__c.class, "Name = 'Object 1' OR Name = 'Object 2'")
+        def objs = salesForceService. getAllObjects(TestObject.class, "Name = 'Object 1' OR Name = 'Object 2'")
         String[] idsToRemove = new String[ objs.size() ]
 
         objs.eachWithIndex { obj, idx ->

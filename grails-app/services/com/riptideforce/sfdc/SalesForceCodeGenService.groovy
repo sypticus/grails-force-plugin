@@ -52,10 +52,17 @@ class SalesForceCodeGenService extends SalesForceBaseService {
 
             def template = engine.createTemplate(templateFile).make(binding)
             def pkgToDir = pkg.replace('.' as char, File.separatorChar)
+
+            // Remove the '__c' from the class' file name if needed
+            String gClassName = type
+            if( gClassName.endsWith("__c") ) {
+                gClassName = gClassName.substring(0, gClassName.length()-3)
+            }
+
             // Build the class file path
             String classFileName =
                 pluginBasedir + File.separator + "src" + File.separator + "groovy" + File.separator +
-                pkgToDir + File.separator + type + ".groovy"
+                pkgToDir + File.separator + gClassName + ".groovy"
 
             System.out.println("Generating: " + classFileName)
             // print the file

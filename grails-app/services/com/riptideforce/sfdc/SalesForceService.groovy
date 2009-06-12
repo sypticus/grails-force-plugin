@@ -16,6 +16,10 @@ import com.riptideforce.sfdc.soap.util.SObjectConversionUtil
 class SalesForceService extends SalesForceBaseService {
 
 
+    /**
+     * Returns all objects of a given class.
+     * The class must be mapped as a Salesforce object.
+     */
     public
     List getAllObjects(Class<?> type) {
 
@@ -45,6 +49,10 @@ class SalesForceService extends SalesForceBaseService {
         return returnVals
     }
 
+    /**
+     * Returns an object given its type and its Id.
+     * The class must be mapped as a Salesforce object.
+     */
     public
     Object getObjectById( Class<?> type, String Id ) {
 
@@ -69,6 +77,11 @@ class SalesForceService extends SalesForceBaseService {
         return this.buildObject( type, fetch("Select ${fieldStr} from ${objAnnot.name()} where ID = " + id) )
     }
 
+    /**
+     * Returns all objects for a given class that comply with the provided
+     * where clause.
+     * The class must be mapped as a Salesforce object.
+     */
     public
     List getAllObjects( Class<?> type, String whereClause ) {
 
@@ -98,6 +111,10 @@ class SalesForceService extends SalesForceBaseService {
         return returnVals
     }
 
+    /**
+     * Creates a set of new objects in salesforce.
+     * The objects must be mapped as Salesforce objects.
+     */
     public SaveResult[] createObjects( Object ... objs ) {
 
         SObject[] sObjs = new SObject[objs.length]
@@ -116,6 +133,10 @@ class SalesForceService extends SalesForceBaseService {
         return create( sObjs )
     }
 
+    /**
+     * Updates a set of objects in salesforce.
+     * The objects must be mapped as Salesforce objects.
+     */
     public SaveResult[] updateObjects( Object ... objs ) {
 
         SObject[] sObjs = new SObject[objs.length]
@@ -135,19 +156,40 @@ class SalesForceService extends SalesForceBaseService {
 
 
 
-    // Build an Object
+    /**
+     * Build a groovy object from an SObject definition
+     */
     private
     Object buildObject( Class<?> type, SObject so ) {
         OMElement[] elems = so.getExtraElement();
         def object = type.newInstance()
+        def typeFields = type.getDeclaredFields()
+
+        // Get the Salesforce class annotation
+        SalesforceObject objAnnot = type.getAnnotation( SalesforceObject.class )
+        if( objAnnot == null ) {
+            throw new RuntimeException("The provided type is not mapped to Salesforce")
+        }
 
         for( OMElement elem : elems ) {
+
+            // Try to find a mapped field to the given sObject local name
+            def matchingField =
+                typeFields.find {
+                    SalesforceField sfFieldAnn = it.getAnnotation(SalesforceField.class)
+                    if( sfFieldAnn != null ) {
+                        if( sfFieldAnn.name() == elem.getLocalName() ) {
+                            return true
+                        }
+                    }
+                    return false
+                }
 
             // invoke the setter if found
             try {
                 // find the setter and the argument type
-                Class elemType = object.getClass().getDeclaredField(elem.getLocalName()).getType()
-                String setter = SObjectConversionUtil.getDynamicSetterForField(elem.getLocalName());
+                Class elemType = matchingField.getType()
+                String setter = SObjectConversionUtil.getDynamicSetterForField(matchingField.getName());
                 object."${setter}"(SObjectConversionUtil.convertToJavaType( elem.getText(), elemType ))
             }
             catch(NoSuchMethodException nsmex) {
@@ -185,7 +227,7 @@ class SalesForceService extends SalesForceBaseService {
 
                     // get the value
                     Object fieldVal = obj."${getter}"()
-                    String fieldName = field.getName()
+                    String fieldName = sfAnnotation.name()
 
                     // if the field is null
                     if( fieldVal == null ) {
@@ -244,7 +286,7 @@ class SalesForceService extends SalesForceBaseService {
 
                     // get the value
                     Object fieldVal = obj."${getter}"()
-                    String fieldName = field.getName()
+                    String fieldName = sfAnnotation.name()
 
                     // if the field is null
                     if( fieldVal == null ) {

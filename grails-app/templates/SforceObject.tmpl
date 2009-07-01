@@ -30,7 +30,19 @@ for( field in TYPE_DESC.getFields() ) {
 
     String gFieldName = field.getName();
     if( gFieldName.endsWith("__c") ) {
-        gFieldName = gFieldName.substring(0, gFieldName.length()-3)
+        String newFieldName = gFieldName.substring(0, gFieldName.length()-3)
+        boolean fieldExists = false
+
+        for( fieldI in TYPE_DESC.getFields() ) {
+            if( fieldI.getName().equalsIgnoreCase(newFieldName) ) {
+                fieldExists = true
+                break
+            }
+        }
+
+        if( !fieldExists ) {
+            gFieldName = newFieldName
+        }
     }
 
     String fieldType
@@ -86,7 +98,19 @@ for( field in TYPE_DESC.getFields() ) {
 
     String gFieldName = field.getName();
     if( gFieldName.endsWith("__c") ) {
-        gFieldName = gFieldName.substring(0, gFieldName.length()-3)
+        String newFieldName = gFieldName.substring(0, gFieldName.length()-3)
+        boolean fieldExists = false
+
+        for( fieldI in TYPE_DESC.getFields() ) {
+            if( fieldI.getName().equalsIgnoreCase(newFieldName) ) {
+                fieldExists = true
+                break
+            }
+        }
+
+        if( !fieldExists ) {
+            gFieldName = newFieldName
+        }
     }
 
     if( field.getType().toString() == "picklist"

@@ -86,6 +86,94 @@ class SalesForceCodeGenService extends SalesForceBaseService {
     }
 
 
+    def generateCodeForSingleObject(String objectName, String pluginBasedir, String appDir) {
+        if (this.loginRequired()) {
+            if (!login()) {
+                println "Could not login to Salesforce web service."
+                return;
+            }
+        }
+
+        // Get the object names
+        String[] objectNames = this.getObjectNames()
+        // Get the objects Descriptions
+        DescribeSObjectResult[] objectDescs =
+            this.getFieldsForObjectTypes( objectNames )
+
+        // Get the necessary configuration parameters
+        String pkg = DEFAULT_PKG
+        if( ConfigurationHolder.config.salesforce.codegen.pkg ) {
+            pkg = ConfigurationHolder.config.salesforce.codegen.pkg
+        }
+        println "package used: " + pkg
+
+        // Generation Engine
+        def engine = new SimpleTemplateEngine()
+
+        // Find the object description to be generated
+        def typeDesc
+        boolean found = false
+        for( DescribeSObjectResult d : objectDescs ) {
+            if( d.getName() == objectName ) {
+                found = true
+                typeDesc = d
+                break
+            }
+        }
+
+        // Generate a class file for the found object, if any
+        if( found ) {
+
+            String type = typeDesc.getName()
+
+            // Get the class template
+            def templateFile = new File("${pluginBasedir}${File.separator}grails-app${File.separator}templates"
+                + File.separator + "SforceObject.tmpl")
+
+            // Create a new file based on the template and the binding below
+            def binding = [TYPE_NAME: type,
+                           PACKAGE: pkg,
+                           TYPE_DESC: typeDesc ]
+
+            def template = engine.createTemplate(templateFile).make(binding)
+            def pkgToDir = pkg.replace('.' as char, File.separatorChar)
+
+            // Remove the '__c' from the class' file name if needed
+            String gClassName = type
+            if( gClassName.endsWith("__c") ) {
+                gClassName = gClassName.substring(0, gClassName.length()-3)
+            }
+
+            // Build the class file path
+            String classFileName =
+                pluginBasedir + File.separator + "src" + File.separator + "groovy" + File.separator +
+                pkgToDir + File.separator + gClassName + ".groovy"
+
+            System.out.println("Generating: " + classFileName)
+            // print the file
+            def classFile = new File(classFileName)
+            try {
+                // create the new file if it does not exist
+                if( !classFile.exists() ) {
+                    classFile.getParentFile().mkdirs()
+                    classFile.createNewFile()
+                }
+                classFile.withPrintWriter{ pwriter ->
+                    pwriter.println template.toString()
+                }
+            }
+            catch( Exception ex ) {
+                System.out.println("Error generating file: " + ex.getMessage())
+            }
+
+        }
+        // Otherwise, it was not found
+        else {
+            System.out.println("Object with name ${objectName} not found in Salesforce org.")
+        }
+    }
+
+
     def cleanSalesforceArtifacts(String pluginBasedir, String appDir) {
 
         // Get the necessary configuration parameters

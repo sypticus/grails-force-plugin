@@ -54,7 +54,7 @@ class SalesForceBaseServiceTests extends GroovyTestCase {
         }
     }*/
 
-    void testDelete() {
+    /*void testDelete() {
         def objs = salesForceService. getAllObjects(TestObject.class, "Name = 'Object 1' OR Name = 'Object 2'")
         String[] idsToRemove = new String[ objs.size() ]
 
@@ -70,5 +70,75 @@ class SalesForceBaseServiceTests extends GroovyTestCase {
                 println err.getMessage()
             }
         }
-    }
+    }*/
+
+
+    /*void testBatchCreate() {
+
+        def objs = []
+
+        for(i in 1..300) {
+            TestObject tst1 = new TestObject()
+
+            tst1.setName('Object ' + i)
+            tst1.setDescription('Descr for object ' + i)
+            tst1.setCustomDate( Calendar.getInstance() )
+            tst1.setOwnerId( salesForceService.getUserId() )
+            tst1.setColor("Red")
+            tst1.setUses(["Home", "Office"])
+
+            objs << tst1
+
+        }
+
+        // Create
+        SaveResult[] res = salesForceService.createObjects( objs as Object[] )
+        for( SaveResult r : res ) {
+            println r.getSuccess()
+            for( Error err : r.getErrors() ) {
+                println err.getMessage()
+            }
+        }
+    }*/
+
+
+    /*void testBatchUpdate() {
+
+        def objs = salesForceService.getAllObjects(TestObject.class)
+
+        objs.each {
+            it.setName( it.getName() + " Modified" )
+        }
+
+        SaveResult[] res = salesForceService.updateObjects( objs as Object[] )
+        for( SaveResult r : res ) {
+            println r.getSuccess()
+            for( Error err : r.getErrors() ) {
+                println err.getMessage()
+            }
+        }
+
+    }*/
+
+
+    /*void testBatchDelete() {
+
+        def objs = salesForceService.getAllObjects(TestObject.class)
+
+        def ids = []
+
+        objs.each {
+            ids << it.getId()
+        }
+
+
+        // Delete
+        DeleteResult[] res = salesForceService.delete( ids as String[] )
+        for( DeleteResult r : res ) {
+            println r.getSuccess()
+            for( Error err : r.getErrors() ) {
+                println err.getMessage()
+            }
+        }
+    }*/
 }

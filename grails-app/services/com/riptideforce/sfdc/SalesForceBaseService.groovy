@@ -8,6 +8,9 @@ import com.sforce.soap.partner.sobject.SObject
 
 class SalesForceBaseService implements InitializingBean {
 
+    /** Maximim number of updateable objects in a single call */
+    private static final int BATCH_UPDATE_LIMIT = 200;
+
     def String userName
     def String password
     def SforceServiceStub serviceStub
@@ -27,6 +30,24 @@ class SalesForceBaseService implements InitializingBean {
             this.loginThreshold = 3600000
         }
     }
+
+
+    /*
+     * Breaks an array in segments and returns a list of these segments
+     */
+    private List segment( Object[] array, int breakSize ) {
+        def objSegments = []
+        int idx = 0;
+        while( idx < array.length ) {
+            int end = Math.min(idx + breakSize - 1, array.length - 1)
+            objSegments << array[idx..end]
+
+            idx += breakSize
+        }
+
+        return objSegments
+    }
+
 
     /*
      * Check if Login is required
@@ -375,25 +396,38 @@ class SalesForceBaseService implements InitializingBean {
             return null
         }
 
+        // Break the array of objects
+        def objSegments = this.segment(objs, BATCH_UPDATE_LIMIT)
+
 
         try {
 
-            Create createParams = new Create();
-            createParams.setSObjects( objs );
+            // SaveResults object
+            def cumulativeResults = []
 
-            CreateResponse createResp =
-                serviceStub.create( createParams, sessionHeader, null, null, null, null, null );
+            // For each segment, make a call to the Salesforce API
+            objSegments.each { segment ->
+
+                Create createParams = new Create();
+                createParams.setSObjects( segment as SObject[] );
+
+                CreateResponse createResp =
+                    serviceStub.create( createParams, sessionHeader, null, null, null, null, null );
 
 
-            SaveResult[] saveResults = createResp.getResult();
+                SaveResult[] saveResults = createResp.getResult();
 
-            if (saveResults != null){
-                return saveResults;
+                if (saveResults != null){
+                    cumulativeResults += saveResults as List;
+                }
+                else {
+                    log.error("The create SaveResult was null")
+                    System.out.println("The create SaveResult was null");
+                }
             }
-            else {
-                log.error("The create SaveResult was null")
-                System.out.println("The create SaveResult was null");
-            }
+
+            // Return the cumulative results
+            return cumulativeResults as SaveResult[]
         }
         catch (Exception ex) {
             ex.printStackTrace()
@@ -414,22 +448,35 @@ class SalesForceBaseService implements InitializingBean {
             }
         }
 
+        // Break the object array into segments
+        def objSegments = this.segment(objs, BATCH_UPDATE_LIMIT)
+
 
         try{
+            // SaveResults object
+            def cumulativeResults = []
+            
+            // For each object Segment, make one update call
+            objSegments.each { segment ->
 
-            Update updateParams = new Update();
-            updateParams.setSObjects( objs );
+                Update updateParams = new Update();
+                updateParams.setSObjects( segment as SObject[] );
 
-            UpdateResponse updateResp =
-                serviceStub.update( updateParams, sessionHeader, null, null, null, null, null );
-            SaveResult[] saveResults = updateResp.getResult();
+                UpdateResponse updateResp =
+                    serviceStub.update( updateParams, sessionHeader, null, null, null, null, null );
+                SaveResult[] saveResults = updateResp.getResult();
 
-            if (saveResults != null){
-                return saveResults;
+                if (saveResults != null){
+                    cumulativeResults += saveResults as List;
+                }
+                else {
+                    System.out.println("The create SaveResult was null");
+                }
             }
-            else {
-                System.out.println("The create SaveResult was null");
-            }
+
+            // Return the cumulative results
+            return cumulativeResults as SaveResult[]
+
         }
         catch (Exception ex){
             ex.printStackTrace()
@@ -449,21 +496,35 @@ class SalesForceBaseService implements InitializingBean {
             }
         }
 
-        Delete deleteParams = new Delete();
-        for( String id : ids ) {
-            ID newId = new ID();
-            newId.setID(id);
-            deleteParams.addIds( newId );
-        }
-        DeleteResponse deleteResp =
-            serviceStub.delete(deleteParams, sessionHeader, null, null, null, null);
-        DeleteResult[] deleteResults = deleteResp.getResult();
+        // Break the object array into segments
+        def idSegments = this.segment(ids, BATCH_UPDATE_LIMIT)
 
-        if (deleteResults != null) {
-            return deleteResults;
-        }
-        else {
-            System.out.println("The DeleteResults were null");
+        // Cumulative Results
+        def cumulativeResults = []
+
+        // For each id segment, make a delete call
+        idSegments.each { segment ->
+            Delete deleteParams = new Delete();
+            
+            for( String id : segment ) {
+                ID newId = new ID();
+                newId.setID(id);
+                deleteParams.addIds( newId );
+            }
+
+            DeleteResponse deleteResp =
+                serviceStub.delete(deleteParams, sessionHeader, null, null, null, null);
+            DeleteResult[] deleteResults = deleteResp.getResult();
+
+            if (deleteResults != null) {
+                cumulativeResults += deleteResults as List;
+            }
+            else {
+                System.out.println("The DeleteResults were null");
+            }
+            
+            // Return the cumulative results
+            return cumulativeResults as DeleteResult[]
         }
         return null;
     }

@@ -11,7 +11,43 @@ class SalesForceCodeGenService extends SalesForceBaseService {
     /* Default package to use if none is configured */
     private static final String DEFAULT_PKG = "com.riptideforce.sfdc";
 
-    def generateCode(String pluginBasedir, String appDir) {
+
+    /**
+     * Applies a template to given type Description.
+     */
+    private void applyTemplate(Map binding, String templateLoc, String outputLoc) {
+
+        // Generation Engine
+        def engine = new SimpleTemplateEngine()
+
+        // Generate a class file for the object
+
+        // Get the template
+        def templateFile = new File("${templateLoc}")
+        def template = engine.createTemplate(templateFile).make(binding)
+
+        // Build the file path
+        System.out.println("Generating: " + outputLoc)
+        // print the file
+        def classFile = new File(outputLoc)
+        try {
+            // create the new file if it does not exist
+            if( !classFile.exists() ) {
+                classFile.getParentFile().mkdirs()
+                classFile.createNewFile()
+            }
+            classFile.withPrintWriter{ pwriter ->
+                pwriter.println template.toString()
+            }
+        }
+        catch( Exception ex ) {
+            System.out.println("Error generating file: " + ex.getMessage())
+        }
+
+    }
+    
+
+    def generateCode(String pluginBasedir, String appDir, boolean generateDomainClass) {
 
         if (this.loginRequired()) {
             if (!login()) {
@@ -42,15 +78,14 @@ class SalesForceCodeGenService extends SalesForceBaseService {
             String type = typeDesc.getName()
 
             // Get the class template
-            def templateFile = new File("${pluginBasedir}${File.separator}grails-app${File.separator}templates"
-                + File.separator + "SforceObject.tmpl")
+            def templateFileName = "${pluginBasedir}${File.separator}grails-app${File.separator}templates" +
+                    File.separator + "SforceObject.tmpl"
 
             // Create a new file based on the template and the binding below
             def binding = [TYPE_NAME: type,
                            PACKAGE: pkg,
                            TYPE_DESC: typeDesc ]
 
-            def template = engine.createTemplate(templateFile).make(binding)
             def pkgToDir = pkg.replace('.' as char, File.separatorChar)
 
             // Remove the '__c' from the class' file name if needed
@@ -64,21 +99,31 @@ class SalesForceCodeGenService extends SalesForceBaseService {
                 pluginBasedir + File.separator + "src" + File.separator + "groovy" + File.separator +
                 pkgToDir + File.separator + gClassName + ".groovy"
 
-            System.out.println("Generating: " + classFileName)
+
             // print the file
-            def classFile = new File(classFileName)
             try {
-                // create the new file if it does not exist
-                if( !classFile.exists() ) {
-                    classFile.getParentFile().mkdirs()
-                    classFile.createNewFile()
-                }
-                classFile.withPrintWriter{ pwriter ->
-                    pwriter.println template.toString()
-                }
+                this.applyTemplate(binding, templateFileName, classFileName)
             }
             catch( Exception ex ) {
                 System.out.println("Error generating file: " + ex.getMessage())
+            }
+
+
+            // Generate the Domain class if so requested
+            if(generateDomainClass) {
+                templateFileName = "${pluginBasedir}${File.separator}grails-app${File.separator}templates" +
+                    File.separator + "SforceDomainObject.tmpl"
+                classFileName =
+                    "${appDir}${File.separator}grails-app${File.separator}domain${File.separator}" +
+                    "${pkgToDir}${File.separator}SF${gClassName}.groovy"
+
+                // print the file
+                try {
+                    this.applyTemplate(binding, templateFileName, classFileName)
+                }
+                catch( Exception ex ) {
+                    System.out.println("Error generating Domain class file: " + ex.getMessage())
+                }
             }
 
         }
@@ -86,7 +131,9 @@ class SalesForceCodeGenService extends SalesForceBaseService {
     }
 
 
-    def generateCodeForSingleObject(String objectName, String pluginBasedir, String appDir) {
+    def generateCodeForSingleObject(String objectName, String pluginBasedir,
+                                    String appDir, boolean generateDomainClass) {
+
         if (this.loginRequired()) {
             if (!login()) {
                 println "Could not login to Salesforce web service."
@@ -107,9 +154,6 @@ class SalesForceCodeGenService extends SalesForceBaseService {
         }
         println "package used: " + pkg
 
-        // Generation Engine
-        def engine = new SimpleTemplateEngine()
-
         // Find the object description to be generated
         def typeDesc
         boolean found = false
@@ -126,16 +170,15 @@ class SalesForceCodeGenService extends SalesForceBaseService {
 
             String type = typeDesc.getName()
 
-            // Get the class template
-            def templateFile = new File("${pluginBasedir}${File.separator}grails-app${File.separator}templates"
-                + File.separator + "SforceObject.tmpl")
-
             // Create a new file based on the template and the binding below
             def binding = [TYPE_NAME: type,
                            PACKAGE: pkg,
                            TYPE_DESC: typeDesc ]
 
-            def template = engine.createTemplate(templateFile).make(binding)
+            // Get the class template
+            def templateFileName = "${pluginBasedir}${File.separator}grails-app${File.separator}templates" +
+                File.separator + "SforceObject.tmpl"
+
             def pkgToDir = pkg.replace('.' as char, File.separatorChar)
 
             // Remove the '__c' from the class' file name if needed
@@ -149,21 +192,31 @@ class SalesForceCodeGenService extends SalesForceBaseService {
                 pluginBasedir + File.separator + "src" + File.separator + "groovy" + File.separator +
                 pkgToDir + File.separator + gClassName + ".groovy"
 
-            System.out.println("Generating: " + classFileName)
+
             // print the file
-            def classFile = new File(classFileName)
             try {
-                // create the new file if it does not exist
-                if( !classFile.exists() ) {
-                    classFile.getParentFile().mkdirs()
-                    classFile.createNewFile()
-                }
-                classFile.withPrintWriter{ pwriter ->
-                    pwriter.println template.toString()
-                }
+                this.applyTemplate(binding, templateFileName, classFileName)
             }
             catch( Exception ex ) {
                 System.out.println("Error generating file: " + ex.getMessage())
+            }
+
+
+            // Generate the Domain class if so requested
+            if(generateDomainClass) {
+                templateFileName = "${pluginBasedir}${File.separator}grails-app${File.separator}templates" +
+                    File.separator + "SforceDomainObject.tmpl"
+                classFileName =
+                    "${appDir}${File.separator}grails-app${File.separator}domain${File.separator}" +
+                    "${pkgToDir}${File.separator}SF${gClassName}.groovy"
+
+                // print the file
+                try {
+                    this.applyTemplate(binding, templateFileName, classFileName)
+                }
+                catch( Exception ex ) {
+                    System.out.println("Error generating Domain class file: " + ex.getMessage())
+                }
             }
 
         }

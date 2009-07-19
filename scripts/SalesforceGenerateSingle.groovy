@@ -18,8 +18,7 @@ target(generateSingle: "The implementation task") {
 
     // Expected Parameters
     def objectName
-    boolean genDomainConversion
-    boolean scaffold
+    boolean genDomainClass = false
 
     // in case there was no name provided
     def params = argsMap["params"]
@@ -32,19 +31,10 @@ target(generateSingle: "The implementation task") {
     }
 
     // Read all other arguments
-    (1..<params.length).each {
-        def param = params[it]
-
-        // -c : Create conversion code to domain object
-        if( param == "-c" ) {
-            genDomainConversion = true
-        }
-        // -s : Scaffold generated objects after conversion
-        else if( param == "-s" ) {
-            scaffold = true
-        }
+    if( argsMap.d ) {
+        genDomainClass = true
     }
 
-    salesForceCodeGenService.generateCodeForSingleObject( objectName, "${pluginHome}", "${basedir}" )
+    salesForceCodeGenService.generateCodeForSingleObject( objectName, "${pluginHome}", "${basedir}", genDomainClass )
     event('StatusFinal', ['Done'])
 }

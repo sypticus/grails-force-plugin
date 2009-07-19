@@ -141,4 +141,23 @@ class SalesForceBaseServiceTests extends GroovyTestCase {
             }
         }
     }*/
+
+
+    void testDomainObjects() {
+        TestObject tst1 = new TestObject()
+        TestObject tst2 = new TestObject()
+
+        tst1.setName('Object 1')
+        tst1.setDescription('Descr for object 1')
+        tst1.setCustomDate( Calendar.getInstance() )
+        tst1.setOwnerId( salesForceService.getUserId() )
+        tst1.setColor("Red")
+        tst1.setUses(["Home", "Office"])
+
+
+        SFTestObject sfTst = new SFTestObject()
+        sfTst.copyFrom(tst1)
+        sfTst.toSalesforceObject()
+        sfTst.save(flush:true)
+    }
 }

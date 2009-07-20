@@ -1,7 +1,6 @@
 import org.codehaus.groovy.grails.commons.GrailsClassUtils as GCU
 
-pluginHome = new File("./plugins").listFiles().find { it.name.startsWith('salesforce-')}
-if(pluginHome == null) pluginHome = "."
+pluginHome = "${salesforcePluginDir}" + File.separator
 
 includeTargets << grailsScript( "Init" )
 includeTargets << new File("${pluginHome}/scripts/SalesforceInit.groovy")
@@ -12,7 +11,7 @@ target('default': "Describes the Salesforce instance.") {
 
 target(describeSingle: "The implementation task") {
     depends(parseArguments, initSalesforceService)
-    
+
     // in case there was no name provided
     def params = argsMap["params"] 
     if( params[0] == null ) {

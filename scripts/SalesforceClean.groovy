@@ -3,8 +3,7 @@ import org.codehaus.groovy.grails.commons.GrailsClassUtils as GCU
 grailsHome = Ant.project.properties."environment.GRAILS_HOME"
 
 // Plugin home dir
-pluginHome = new File("./plugins").listFiles().find { it.name.startsWith('salesforce-')}
-if(pluginHome == null) pluginHome = "."
+pluginHome = "${salesforcePluginDir}" + File.separator
 
 includeTargets << new File("${pluginHome}/scripts/SalesforceInit.groovy")
 

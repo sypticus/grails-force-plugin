@@ -3,7 +3,7 @@
  * ChildRelationship.java
  *
  * This file was auto-generated from WSDL
- * by the Apache Axis2 version: 1.4.1  Built on : Aug 13, 2008 (05:03:41 LKT)
+ * by the Apache Axis2 version: 1.5  Built on : Apr 30, 2009 (06:07:47 EDT)
  */
             
                 package com.sforce.soap.partner;
@@ -86,6 +86,96 @@
                                public void setChildSObject(java.lang.String param){
                             
                                             this.localChildSObject=param;
+                                    
+
+                               }
+                            
+
+                        /**
+                        * field for Deprecated
+                        */
+
+                        
+                                    protected boolean localDeprecated ;
+                                
+                           /*  This tracker boolean wil be used to detect whether the user called the set method
+                          *   for this attribute. It will be used to determine whether to include this field
+                           *   in the serialized XML
+                           */
+                           protected boolean localDeprecatedTracker = false ;
+                           
+
+                           /**
+                           * Auto generated getter method
+                           * @return boolean
+                           */
+                           public  boolean getDeprecated(){
+                               return localDeprecated;
+                           }
+
+                           
+                        
+                            /**
+                               * Auto generated setter method
+                               * @param param Deprecated
+                               */
+                               public void setDeprecated(boolean param){
+                            
+                                       // setting primitive attribute tracker to true
+                                       
+                                               if (false) {
+                                           localDeprecatedTracker = false;
+                                              
+                                       } else {
+                                          localDeprecatedTracker = true;
+                                       }
+                                   
+                                            this.localDeprecated=param;
+                                    
+
+                               }
+                            
+
+                        /**
+                        * field for DeprecatedAndHidden
+                        */
+
+                        
+                                    protected boolean localDeprecatedAndHidden ;
+                                
+                           /*  This tracker boolean wil be used to detect whether the user called the set method
+                          *   for this attribute. It will be used to determine whether to include this field
+                           *   in the serialized XML
+                           */
+                           protected boolean localDeprecatedAndHiddenTracker = false ;
+                           
+
+                           /**
+                           * Auto generated getter method
+                           * @return boolean
+                           */
+                           public  boolean getDeprecatedAndHidden(){
+                               return localDeprecatedAndHidden;
+                           }
+
+                           
+                        
+                            /**
+                               * Auto generated setter method
+                               * @param param DeprecatedAndHidden
+                               */
+                               public void setDeprecatedAndHidden(boolean param){
+                            
+                                       // setting primitive attribute tracker to true
+                                       
+                                               if (false) {
+                                           localDeprecatedAndHiddenTracker = false;
+                                              
+                                       } else {
+                                          localDeprecatedAndHiddenTracker = true;
+                                       }
+                                   
+                                            this.localDeprecatedAndHidden=param;
                                     
 
                                }
@@ -324,7 +414,65 @@
                                           }
                                     
                                    xmlWriter.writeEndElement();
-                             
+                              if (localDeprecatedTracker){
+                                    namespace = "urn:partner.soap.sforce.com";
+                                    if (! namespace.equals("")) {
+                                        prefix = xmlWriter.getPrefix(namespace);
+
+                                        if (prefix == null) {
+                                            prefix = generatePrefix(namespace);
+
+                                            xmlWriter.writeStartElement(prefix,"deprecated", namespace);
+                                            xmlWriter.writeNamespace(prefix, namespace);
+                                            xmlWriter.setPrefix(prefix, namespace);
+
+                                        } else {
+                                            xmlWriter.writeStartElement(namespace,"deprecated");
+                                        }
+
+                                    } else {
+                                        xmlWriter.writeStartElement("deprecated");
+                                    }
+                                
+                                               if (false) {
+                                           
+                                                         throw new org.apache.axis2.databinding.ADBException("deprecated cannot be null!!");
+                                                      
+                                               } else {
+                                                    xmlWriter.writeCharacters(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localDeprecated));
+                                               }
+                                    
+                                   xmlWriter.writeEndElement();
+                             } if (localDeprecatedAndHiddenTracker){
+                                    namespace = "urn:partner.soap.sforce.com";
+                                    if (! namespace.equals("")) {
+                                        prefix = xmlWriter.getPrefix(namespace);
+
+                                        if (prefix == null) {
+                                            prefix = generatePrefix(namespace);
+
+                                            xmlWriter.writeStartElement(prefix,"deprecatedAndHidden", namespace);
+                                            xmlWriter.writeNamespace(prefix, namespace);
+                                            xmlWriter.setPrefix(prefix, namespace);
+
+                                        } else {
+                                            xmlWriter.writeStartElement(namespace,"deprecatedAndHidden");
+                                        }
+
+                                    } else {
+                                        xmlWriter.writeStartElement("deprecatedAndHidden");
+                                    }
+                                
+                                               if (false) {
+                                           
+                                                         throw new org.apache.axis2.databinding.ADBException("deprecatedAndHidden cannot be null!!");
+                                                      
+                                               } else {
+                                                    xmlWriter.writeCharacters(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localDeprecatedAndHidden));
+                                               }
+                                    
+                                   xmlWriter.writeEndElement();
+                             }
                                     namespace = "urn:partner.soap.sforce.com";
                                     if (! namespace.equals("")) {
                                         prefix = xmlWriter.getPrefix(namespace);
@@ -569,7 +717,19 @@
                                         } else {
                                            throw new org.apache.axis2.databinding.ADBException("childSObject cannot be null!!");
                                         }
-                                    
+                                     if (localDeprecatedTracker){
+                                      elementList.add(new javax.xml.namespace.QName("urn:partner.soap.sforce.com",
+                                                                      "deprecated"));
+                                 
+                                elementList.add(
+                                   org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localDeprecated));
+                            } if (localDeprecatedAndHiddenTracker){
+                                      elementList.add(new javax.xml.namespace.QName("urn:partner.soap.sforce.com",
+                                                                      "deprecatedAndHidden"));
+                                 
+                                elementList.add(
+                                   org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localDeprecatedAndHidden));
+                            }
                                       elementList.add(new javax.xml.namespace.QName("urn:partner.soap.sforce.com",
                                                                       "field"));
                                  
@@ -701,6 +861,42 @@
                                     throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getLocalName());
                                 }
                             
+                                    
+                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+                                
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("urn:partner.soap.sforce.com","deprecated").equals(reader.getName())){
+                                
+                                    java.lang.String content = reader.getElementText();
+                                    
+                                              object.setDeprecated(
+                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToBoolean(content));
+                                              
+                                        reader.next();
+                                    
+                              }  // End of if for expected property start element
+                                
+                                    else {
+                                        
+                                    }
+                                
+                                    
+                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+                                
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("urn:partner.soap.sforce.com","deprecatedAndHidden").equals(reader.getName())){
+                                
+                                    java.lang.String content = reader.getElementText();
+                                    
+                                              object.setDeprecatedAndHidden(
+                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToBoolean(content));
+                                              
+                                        reader.next();
+                                    
+                              }  // End of if for expected property start element
+                                
+                                    else {
+                                        
+                                    }
+                                
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 

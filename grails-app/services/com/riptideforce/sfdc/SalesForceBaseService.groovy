@@ -162,7 +162,7 @@ class SalesForceBaseService implements InitializingBean {
         DescribeGlobal params = new DescribeGlobal();
         try {
             DescribeGlobalResponse response =
-                this.serviceStub.describeGlobal( params, this.sessionHeader, null );
+                this.serviceStub.describeGlobal( params, this.sessionHeader, null, null );
             DescribeGlobalResult result = response.getResult();
 
             return result.getTypes();
@@ -264,7 +264,7 @@ class SalesForceBaseService implements InitializingBean {
                 params.setSObjectType( typesSegment )
 
                 DescribeSObjectsResponse response =
-                this.serviceStub.describeSObjects(params, this.sessionHeader, null, null)
+                this.serviceStub.describeSObjects(params, this.sessionHeader, null, null, null)
                 partialResults = response.getResult()
 
             }
@@ -323,7 +323,7 @@ class SalesForceBaseService implements InitializingBean {
             params.setQueryString(query)
 
             QueryResponse response =
-            this.serviceStub.query(params, this.sessionHeader, null, null, null);
+            this.serviceStub.query(params, this.sessionHeader, null, null, null, null);
 
             if (response != null && response.getResult() != null){
                 return response.getResult().getRecords();
@@ -358,7 +358,7 @@ class SalesForceBaseService implements InitializingBean {
             params.setQueryString(query)
 
             QueryResponse response =
-                this.serviceStub.query(params, this.sessionHeader, null, null, null);
+                this.serviceStub.query(params, this.sessionHeader, null, null, null, null);
             if( response != null ) {
                 qr = response.getResult()
             }
@@ -412,7 +412,7 @@ class SalesForceBaseService implements InitializingBean {
                 createParams.setSObjects( segment as SObject[] );
 
                 CreateResponse createResp =
-                    serviceStub.create( createParams, sessionHeader, null, null, null, null, null );
+                    serviceStub.create( createParams, sessionHeader, null, null, null, null, null, null, null );
 
 
                 SaveResult[] saveResults = createResp.getResult();
@@ -451,7 +451,6 @@ class SalesForceBaseService implements InitializingBean {
         // Break the object array into segments
         def objSegments = this.segment(objs, BATCH_UPDATE_LIMIT)
 
-
         try{
             // SaveResults object
             def cumulativeResults = []
@@ -463,7 +462,7 @@ class SalesForceBaseService implements InitializingBean {
                 updateParams.setSObjects( segment as SObject[] );
 
                 UpdateResponse updateResp =
-                    serviceStub.update( updateParams, sessionHeader, null, null, null, null, null );
+                    serviceStub.update( updateParams, sessionHeader, null, null, null, null, null, null, null );
                 SaveResult[] saveResults = updateResp.getResult();
 
                 if (saveResults != null){
@@ -513,7 +512,7 @@ class SalesForceBaseService implements InitializingBean {
             }
 
             DeleteResponse deleteResp =
-                serviceStub.delete(deleteParams, sessionHeader, null, null, null, null);
+                serviceStub.delete(deleteParams, sessionHeader, null, null, null, null, null, null);
             DeleteResult[] deleteResults = deleteResp.getResult();
 
             if (deleteResults != null) {

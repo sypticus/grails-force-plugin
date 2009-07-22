@@ -4,7 +4,7 @@
  * SforceService.java
  *
  * This file was auto-generated from WSDL
- * by the Apache Axis2 version: 1.4.1  Built on : Aug 13, 2008 (05:03:35 LKT)
+ * by the Apache Axis2 version: 1.5  Built on : Apr 30, 2009 (06:07:24 EDT)
  */
 
     package com.sforce.soap.partner;
@@ -18,8 +18,8 @@
 
         /**
           * Auto generated method signature
-          * Merge and update a set of sObjects based on object id
-                    * @param merge
+          * Update or insert a set of sObjects based on object id
+                    * @param upsert
                 
                     * @param sessionHeader
                 
@@ -29,7 +29,11 @@
                 
                     * @param mruHeader
                 
+                    * @param allowFieldTruncationHeader
+                
                     * @param debuggingHeader
+                
+                    * @param packageVersionHeader
                 
                     * @param emailHeader
                 
@@ -40,9 +44,9 @@
          */
 
          
-                     public com.sforce.soap.partner.MergeResponse merge(
+                     public com.sforce.soap.partner.UpsertResponse upsert(
 
-                        com.sforce.soap.partner.Merge merge,com.sforce.soap.partner.SessionHeader sessionHeader,com.sforce.soap.partner.CallOptions callOptions,com.sforce.soap.partner.AssignmentRuleHeader assignmentRuleHeader,com.sforce.soap.partner.MruHeader mruHeader,com.sforce.soap.partner.DebuggingHeader debuggingHeader,com.sforce.soap.partner.EmailHeader emailHeader)
+                        com.sforce.soap.partner.Upsert upsert,com.sforce.soap.partner.SessionHeader sessionHeader,com.sforce.soap.partner.CallOptions callOptions,com.sforce.soap.partner.AssignmentRuleHeader assignmentRuleHeader,com.sforce.soap.partner.MruHeader mruHeader,com.sforce.soap.partner.AllowFieldTruncationHeader allowFieldTruncationHeader,com.sforce.soap.partner.DebuggingHeader debuggingHeader,com.sforce.soap.partner.PackageVersionHeader packageVersionHeader,com.sforce.soap.partner.EmailHeader emailHeader)
                         throws java.rmi.RemoteException
              
           ,com.sforce.soap.partner.InvalidSObjectFault
@@ -54,64 +58,24 @@
 
         /**
           * Auto generated method signature
-          * Returns standard information relevant to the current user
-                    * @param getUserInfo
+          * Update a set of sObjects
+                    * @param update
                 
                     * @param sessionHeader0
                 
                     * @param callOptions1
                 
-             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
-         */
-
-         
-                     public com.sforce.soap.partner.GetUserInfoResponse getUserInfo(
-
-                        com.sforce.soap.partner.GetUserInfo getUserInfo,com.sforce.soap.partner.SessionHeader sessionHeader0,com.sforce.soap.partner.CallOptions callOptions1)
-                        throws java.rmi.RemoteException
-             
-          ,com.sforce.soap.partner.UnexpectedErrorFault;
-
-        
-
-        /**
-          * Auto generated method signature
-          * Describe the layout of the SoftPhone
-                    * @param describeSoftphoneLayout
+                    * @param assignmentRuleHeader2
                 
-                    * @param sessionHeader2
+                    * @param mruHeader3
                 
-                    * @param callOptions3
+                    * @param allowFieldTruncationHeader4
                 
-             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
-         */
-
-         
-                     public com.sforce.soap.partner.DescribeSoftphoneLayoutResponse describeSoftphoneLayout(
-
-                        com.sforce.soap.partner.DescribeSoftphoneLayout describeSoftphoneLayout,com.sforce.soap.partner.SessionHeader sessionHeader2,com.sforce.soap.partner.CallOptions callOptions3)
-                        throws java.rmi.RemoteException
-             
-          ,com.sforce.soap.partner.UnexpectedErrorFault;
-
-        
-
-        /**
-          * Auto generated method signature
-          * Update a set of sObjects
-                    * @param update
+                    * @param debuggingHeader5
                 
-                    * @param sessionHeader4
+                    * @param packageVersionHeader6
                 
-                    * @param callOptions5
-                
-                    * @param assignmentRuleHeader6
-                
-                    * @param mruHeader7
-                
-                    * @param debuggingHeader8
-                
-                    * @param emailHeader9
+                    * @param emailHeader7
                 
              * @throws com.sforce.soap.partner.InvalidSObjectFault : 
              * @throws com.sforce.soap.partner.InvalidIdFault : 
@@ -122,7 +86,7 @@
          
                      public com.sforce.soap.partner.UpdateResponse update(
 
-                        com.sforce.soap.partner.Update update,com.sforce.soap.partner.SessionHeader sessionHeader4,com.sforce.soap.partner.CallOptions callOptions5,com.sforce.soap.partner.AssignmentRuleHeader assignmentRuleHeader6,com.sforce.soap.partner.MruHeader mruHeader7,com.sforce.soap.partner.DebuggingHeader debuggingHeader8,com.sforce.soap.partner.EmailHeader emailHeader9)
+                        com.sforce.soap.partner.Update update,com.sforce.soap.partner.SessionHeader sessionHeader0,com.sforce.soap.partner.CallOptions callOptions1,com.sforce.soap.partner.AssignmentRuleHeader assignmentRuleHeader2,com.sforce.soap.partner.MruHeader mruHeader3,com.sforce.soap.partner.AllowFieldTruncationHeader allowFieldTruncationHeader4,com.sforce.soap.partner.DebuggingHeader debuggingHeader5,com.sforce.soap.partner.PackageVersionHeader packageVersionHeader6,com.sforce.soap.partner.EmailHeader emailHeader7)
                         throws java.rmi.RemoteException
              
           ,com.sforce.soap.partner.InvalidSObjectFault
@@ -134,48 +98,56 @@
 
         /**
           * Auto generated method signature
-          * Set a user's password
-                    * @param setPassword
+          * Search for sObjects
+                    * @param search
                 
-                    * @param sessionHeader10
+                    * @param sessionHeader8
                 
-                    * @param callOptions11
+                    * @param callOptions9
                 
-             * @throws com.sforce.soap.partner.InvalidIdFault : 
+                    * @param packageVersionHeader10
+                
+             * @throws com.sforce.soap.partner.InvalidSObjectFault : 
+             * @throws com.sforce.soap.partner.MalformedSearchFault : 
+             * @throws com.sforce.soap.partner.InvalidFieldFault : 
              * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
-             * @throws com.sforce.soap.partner.InvalidNewPasswordFault : 
          */
 
          
-                     public com.sforce.soap.partner.SetPasswordResponse setPassword(
+                     public com.sforce.soap.partner.SearchResponse search(
 
-                        com.sforce.soap.partner.SetPassword setPassword,com.sforce.soap.partner.SessionHeader sessionHeader10,com.sforce.soap.partner.CallOptions callOptions11)
+                        com.sforce.soap.partner.Search search,com.sforce.soap.partner.SessionHeader sessionHeader8,com.sforce.soap.partner.CallOptions callOptions9,com.sforce.soap.partner.PackageVersionHeader packageVersionHeader10)
                         throws java.rmi.RemoteException
              
-          ,com.sforce.soap.partner.InvalidIdFault
-          ,com.sforce.soap.partner.UnexpectedErrorFault
-          ,com.sforce.soap.partner.InvalidNewPasswordFault;
+          ,com.sforce.soap.partner.InvalidSObjectFault
+          ,com.sforce.soap.partner.MalformedSearchFault
+          ,com.sforce.soap.partner.InvalidFieldFault
+          ,com.sforce.soap.partner.UnexpectedErrorFault;
 
         
 
         /**
           * Auto generated method signature
-          * Logout the current user, invalidating the current session.
-                    * @param logout
+          * Reset a user's password
+                    * @param resetPassword
                 
-                    * @param sessionHeader12
+                    * @param sessionHeader11
                 
-                    * @param callOptions13
+                    * @param callOptions12
                 
+                    * @param emailHeader13
+                
+             * @throws com.sforce.soap.partner.InvalidIdFault : 
              * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
          */
 
          
-                     public com.sforce.soap.partner.LogoutResponse logout(
+                     public com.sforce.soap.partner.ResetPasswordResponse resetPassword(
 
-                        com.sforce.soap.partner.Logout logout,com.sforce.soap.partner.SessionHeader sessionHeader12,com.sforce.soap.partner.CallOptions callOptions13)
+                        com.sforce.soap.partner.ResetPassword resetPassword,com.sforce.soap.partner.SessionHeader sessionHeader11,com.sforce.soap.partner.CallOptions callOptions12,com.sforce.soap.partner.EmailHeader emailHeader13)
                         throws java.rmi.RemoteException
              
+          ,com.sforce.soap.partner.InvalidIdFault
           ,com.sforce.soap.partner.UnexpectedErrorFault;
 
         
@@ -193,6 +165,8 @@
                 
                     * @param mruHeader16
                 
+                    * @param packageVersionHeader17
+                
              * @throws com.sforce.soap.partner.InvalidSObjectFault : 
              * @throws com.sforce.soap.partner.MalformedQueryFault : 
              * @throws com.sforce.soap.partner.InvalidIdFault : 
@@ -203,7 +177,7 @@
          
                      public com.sforce.soap.partner.RetrieveResponse retrieve(
 
-                        com.sforce.soap.partner.Retrieve retrieve,com.sforce.soap.partner.SessionHeader sessionHeader14,com.sforce.soap.partner.CallOptions callOptions15,com.sforce.soap.partner.QueryOptions queryOptions,com.sforce.soap.partner.MruHeader mruHeader16)
+                        com.sforce.soap.partner.Retrieve retrieve,com.sforce.soap.partner.SessionHeader sessionHeader14,com.sforce.soap.partner.CallOptions callOptions15,com.sforce.soap.partner.QueryOptions queryOptions,com.sforce.soap.partner.MruHeader mruHeader16,com.sforce.soap.partner.PackageVersionHeader packageVersionHeader17)
                         throws java.rmi.RemoteException
              
           ,com.sforce.soap.partner.InvalidSObjectFault
@@ -216,14 +190,178 @@
 
         /**
           * Auto generated method signature
+          * Submit an entity to a workflow process or process a workitem
+                    * @param process
+                
+                    * @param sessionHeader18
+                
+                    * @param callOptions19
+                
+                    * @param allowFieldTruncationHeader20
+                
+                    * @param debuggingHeader21
+                
+                    * @param packageVersionHeader22
+                
+             * @throws com.sforce.soap.partner.InvalidIdFault : 
+             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
+         */
+
+         
+                     public com.sforce.soap.partner.ProcessResponse process(
+
+                        com.sforce.soap.partner.Process process,com.sforce.soap.partner.SessionHeader sessionHeader18,com.sforce.soap.partner.CallOptions callOptions19,com.sforce.soap.partner.AllowFieldTruncationHeader allowFieldTruncationHeader20,com.sforce.soap.partner.DebuggingHeader debuggingHeader21,com.sforce.soap.partner.PackageVersionHeader packageVersionHeader22)
+                        throws java.rmi.RemoteException
+             
+          ,com.sforce.soap.partner.InvalidIdFault
+          ,com.sforce.soap.partner.UnexpectedErrorFault;
+
+        
+
+        /**
+          * Auto generated method signature
+          * Undelete a set of sObjects
+                    * @param undelete
+                
+                    * @param sessionHeader23
+                
+                    * @param callOptions24
+                
+                    * @param allowFieldTruncationHeader25
+                
+                    * @param debuggingHeader26
+                
+                    * @param packageVersionHeader27
+                
+             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
+         */
+
+         
+                     public com.sforce.soap.partner.UndeleteResponse undelete(
+
+                        com.sforce.soap.partner.Undelete undelete,com.sforce.soap.partner.SessionHeader sessionHeader23,com.sforce.soap.partner.CallOptions callOptions24,com.sforce.soap.partner.AllowFieldTruncationHeader allowFieldTruncationHeader25,com.sforce.soap.partner.DebuggingHeader debuggingHeader26,com.sforce.soap.partner.PackageVersionHeader packageVersionHeader27)
+                        throws java.rmi.RemoteException
+             
+          ,com.sforce.soap.partner.UnexpectedErrorFault;
+
+        
+
+        /**
+          * Auto generated method signature
+          * Gets the next batch of sObjects from a query
+                    * @param queryMore
+                
+                    * @param sessionHeader28
+                
+                    * @param callOptions29
+                
+                    * @param queryOptions30
+                
+             * @throws com.sforce.soap.partner.InvalidFieldFault : 
+             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
+             * @throws com.sforce.soap.partner.InvalidQueryLocatorFault : 
+         */
+
+         
+                     public com.sforce.soap.partner.QueryMoreResponse queryMore(
+
+                        com.sforce.soap.partner.QueryMore queryMore,com.sforce.soap.partner.SessionHeader sessionHeader28,com.sforce.soap.partner.CallOptions callOptions29,com.sforce.soap.partner.QueryOptions queryOptions30)
+                        throws java.rmi.RemoteException
+             
+          ,com.sforce.soap.partner.InvalidFieldFault
+          ,com.sforce.soap.partner.UnexpectedErrorFault
+          ,com.sforce.soap.partner.InvalidQueryLocatorFault;
+
+        
+
+        /**
+          * Auto generated method signature
+          * Get the IDs for deleted sObjects
+                    * @param getDeleted
+                
+                    * @param sessionHeader31
+                
+                    * @param callOptions32
+                
+             * @throws com.sforce.soap.partner.InvalidSObjectFault : 
+             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
+         */
+
+         
+                     public com.sforce.soap.partner.GetDeletedResponse getDeleted(
+
+                        com.sforce.soap.partner.GetDeleted getDeleted,com.sforce.soap.partner.SessionHeader sessionHeader31,com.sforce.soap.partner.CallOptions callOptions32)
+                        throws java.rmi.RemoteException
+             
+          ,com.sforce.soap.partner.InvalidSObjectFault
+          ,com.sforce.soap.partner.UnexpectedErrorFault;
+
+        
+
+        /**
+          * Auto generated method signature
+          * Logout the current user, invalidating the current session.
+                    * @param logout
+                
+                    * @param sessionHeader33
+                
+                    * @param callOptions34
+                
+             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
+         */
+
+         
+                     public com.sforce.soap.partner.LogoutResponse logout(
+
+                        com.sforce.soap.partner.Logout logout,com.sforce.soap.partner.SessionHeader sessionHeader33,com.sforce.soap.partner.CallOptions callOptions34)
+                        throws java.rmi.RemoteException
+             
+          ,com.sforce.soap.partner.UnexpectedErrorFault;
+
+        
+
+        /**
+          * Auto generated method signature
+          * Delete a set of sObjects
+                    * @param delete
+                
+                    * @param sessionHeader35
+                
+                    * @param callOptions36
+                
+                    * @param packageVersionHeader37
+                
+                    * @param userTerritoryDeleteHeader
+                
+                    * @param emailHeader38
+                
+                    * @param allowFieldTruncationHeader39
+                
+                    * @param debuggingHeader40
+                
+             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
+         */
+
+         
+                     public com.sforce.soap.partner.DeleteResponse delete(
+
+                        com.sforce.soap.partner.Delete delete,com.sforce.soap.partner.SessionHeader sessionHeader35,com.sforce.soap.partner.CallOptions callOptions36,com.sforce.soap.partner.PackageVersionHeader packageVersionHeader37,com.sforce.soap.partner.UserTerritoryDeleteHeader userTerritoryDeleteHeader,com.sforce.soap.partner.EmailHeader emailHeader38,com.sforce.soap.partner.AllowFieldTruncationHeader allowFieldTruncationHeader39,com.sforce.soap.partner.DebuggingHeader debuggingHeader40)
+                        throws java.rmi.RemoteException
+             
+          ,com.sforce.soap.partner.UnexpectedErrorFault;
+
+        
+
+        /**
+          * Auto generated method signature
           * Create a Query Cursor, including deleted sObjects
                     * @param queryAll
                 
-                    * @param sessionHeader17
+                    * @param sessionHeader41
                 
-                    * @param callOptions18
+                    * @param callOptions42
                 
-                    * @param queryOptions19
+                    * @param queryOptions43
                 
              * @throws com.sforce.soap.partner.InvalidSObjectFault : 
              * @throws com.sforce.soap.partner.MalformedQueryFault : 
@@ -236,7 +374,7 @@
          
                      public com.sforce.soap.partner.QueryAllResponse queryAll(
 
-                        com.sforce.soap.partner.QueryAll queryAll,com.sforce.soap.partner.SessionHeader sessionHeader17,com.sforce.soap.partner.CallOptions callOptions18,com.sforce.soap.partner.QueryOptions queryOptions19)
+                        com.sforce.soap.partner.QueryAll queryAll,com.sforce.soap.partner.SessionHeader sessionHeader41,com.sforce.soap.partner.CallOptions callOptions42,com.sforce.soap.partner.QueryOptions queryOptions43)
                         throws java.rmi.RemoteException
              
           ,com.sforce.soap.partner.InvalidSObjectFault
@@ -250,49 +388,55 @@
 
         /**
           * Auto generated method signature
-          * Get the IDs for updated sObjects
-                    * @param getUpdated
+          * convert a set of leads
+                    * @param convertLead
                 
-                    * @param sessionHeader20
+                    * @param sessionHeader44
                 
-                    * @param callOptions21
+                    * @param callOptions45
                 
-             * @throws com.sforce.soap.partner.InvalidSObjectFault : 
+                    * @param allowFieldTruncationHeader46
+                
+                    * @param debuggingHeader47
+                
+                    * @param packageVersionHeader48
+                
              * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
          */
 
          
-                     public com.sforce.soap.partner.GetUpdatedResponse getUpdated(
+                     public com.sforce.soap.partner.ConvertLeadResponse convertLead(
 
-                        com.sforce.soap.partner.GetUpdated getUpdated,com.sforce.soap.partner.SessionHeader sessionHeader20,com.sforce.soap.partner.CallOptions callOptions21)
+                        com.sforce.soap.partner.ConvertLead convertLead,com.sforce.soap.partner.SessionHeader sessionHeader44,com.sforce.soap.partner.CallOptions callOptions45,com.sforce.soap.partner.AllowFieldTruncationHeader allowFieldTruncationHeader46,com.sforce.soap.partner.DebuggingHeader debuggingHeader47,com.sforce.soap.partner.PackageVersionHeader packageVersionHeader48)
                         throws java.rmi.RemoteException
              
-          ,com.sforce.soap.partner.InvalidSObjectFault
           ,com.sforce.soap.partner.UnexpectedErrorFault;
 
         
 
         /**
           * Auto generated method signature
-          * Undelete a set of sObjects
-                    * @param undelete
+          * Set a user's password
+                    * @param setPassword
                 
-                    * @param sessionHeader22
+                    * @param sessionHeader49
                 
-                    * @param callOptions23
+                    * @param callOptions50
                 
-                    * @param debuggingHeader24
-                
+             * @throws com.sforce.soap.partner.InvalidIdFault : 
              * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
+             * @throws com.sforce.soap.partner.InvalidNewPasswordFault : 
          */
 
          
-                     public com.sforce.soap.partner.UndeleteResponse undelete(
+                     public com.sforce.soap.partner.SetPasswordResponse setPassword(
 
-                        com.sforce.soap.partner.Undelete undelete,com.sforce.soap.partner.SessionHeader sessionHeader22,com.sforce.soap.partner.CallOptions callOptions23,com.sforce.soap.partner.DebuggingHeader debuggingHeader24)
+                        com.sforce.soap.partner.SetPassword setPassword,com.sforce.soap.partner.SessionHeader sessionHeader49,com.sforce.soap.partner.CallOptions callOptions50)
                         throws java.rmi.RemoteException
              
-          ,com.sforce.soap.partner.UnexpectedErrorFault;
+          ,com.sforce.soap.partner.InvalidIdFault
+          ,com.sforce.soap.partner.UnexpectedErrorFault
+          ,com.sforce.soap.partner.InvalidNewPasswordFault;
 
         
 
@@ -301,17 +445,21 @@
           * Create a set of new sObjects
                     * @param create
                 
-                    * @param sessionHeader25
+                    * @param sessionHeader51
                 
-                    * @param callOptions26
+                    * @param callOptions52
                 
-                    * @param assignmentRuleHeader27
+                    * @param assignmentRuleHeader53
                 
-                    * @param mruHeader28
+                    * @param mruHeader54
                 
-                    * @param debuggingHeader29
+                    * @param allowFieldTruncationHeader55
                 
-                    * @param emailHeader30
+                    * @param debuggingHeader56
+                
+                    * @param packageVersionHeader57
+                
+                    * @param emailHeader58
                 
              * @throws com.sforce.soap.partner.InvalidSObjectFault : 
              * @throws com.sforce.soap.partner.InvalidIdFault : 
@@ -322,7 +470,7 @@
          
                      public com.sforce.soap.partner.CreateResponse create(
 
-                        com.sforce.soap.partner.Create create,com.sforce.soap.partner.SessionHeader sessionHeader25,com.sforce.soap.partner.CallOptions callOptions26,com.sforce.soap.partner.AssignmentRuleHeader assignmentRuleHeader27,com.sforce.soap.partner.MruHeader mruHeader28,com.sforce.soap.partner.DebuggingHeader debuggingHeader29,com.sforce.soap.partner.EmailHeader emailHeader30)
+                        com.sforce.soap.partner.Create create,com.sforce.soap.partner.SessionHeader sessionHeader51,com.sforce.soap.partner.CallOptions callOptions52,com.sforce.soap.partner.AssignmentRuleHeader assignmentRuleHeader53,com.sforce.soap.partner.MruHeader mruHeader54,com.sforce.soap.partner.AllowFieldTruncationHeader allowFieldTruncationHeader55,com.sforce.soap.partner.DebuggingHeader debuggingHeader56,com.sforce.soap.partner.PackageVersionHeader packageVersionHeader57,com.sforce.soap.partner.EmailHeader emailHeader58)
                         throws java.rmi.RemoteException
              
           ,com.sforce.soap.partner.InvalidSObjectFault
@@ -334,20 +482,22 @@
 
         /**
           * Auto generated method signature
-          * Send outbound email
-                    * @param sendEmail
+          * Describe the layout of the SoftPhone
+                    * @param describeSoftphoneLayout
                 
-                    * @param sessionHeader31
+                    * @param sessionHeader59
                 
-                    * @param callOptions32
+                    * @param callOptions60
+                
+                    * @param packageVersionHeader61
                 
              * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
          */
 
          
-                     public com.sforce.soap.partner.SendEmailResponse sendEmail(
+                     public com.sforce.soap.partner.DescribeSoftphoneLayoutResponse describeSoftphoneLayout(
 
-                        com.sforce.soap.partner.SendEmail sendEmail,com.sforce.soap.partner.SessionHeader sessionHeader31,com.sforce.soap.partner.CallOptions callOptions32)
+                        com.sforce.soap.partner.DescribeSoftphoneLayout describeSoftphoneLayout,com.sforce.soap.partner.SessionHeader sessionHeader59,com.sforce.soap.partner.CallOptions callOptions60,com.sforce.soap.partner.PackageVersionHeader packageVersionHeader61)
                         throws java.rmi.RemoteException
              
           ,com.sforce.soap.partner.UnexpectedErrorFault;
@@ -356,28 +506,192 @@
 
         /**
           * Auto generated method signature
-          * Search for sObjects
-                    * @param search
+          * Logs out and invalidates session ids
+                    * @param invalidateSessions
                 
-                    * @param sessionHeader33
+                    * @param sessionHeader62
                 
-                    * @param callOptions34
+                    * @param callOptions63
                 
-             * @throws com.sforce.soap.partner.InvalidSObjectFault : 
-             * @throws com.sforce.soap.partner.MalformedSearchFault : 
-             * @throws com.sforce.soap.partner.InvalidFieldFault : 
              * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
          */
 
          
-                     public com.sforce.soap.partner.SearchResponse search(
+                     public com.sforce.soap.partner.InvalidateSessionsResponse invalidateSessions(
 
-                        com.sforce.soap.partner.Search search,com.sforce.soap.partner.SessionHeader sessionHeader33,com.sforce.soap.partner.CallOptions callOptions34)
+                        com.sforce.soap.partner.InvalidateSessions invalidateSessions,com.sforce.soap.partner.SessionHeader sessionHeader62,com.sforce.soap.partner.CallOptions callOptions63)
+                        throws java.rmi.RemoteException
+             
+          ,com.sforce.soap.partner.UnexpectedErrorFault;
+
+        
+
+        /**
+          * Auto generated method signature
+          * Describe an sObject
+                    * @param describeSObject
+                
+                    * @param sessionHeader64
+                
+                    * @param callOptions65
+                
+                    * @param packageVersionHeader66
+                
+                    * @param localeOptions
+                
+             * @throws com.sforce.soap.partner.InvalidSObjectFault : 
+             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
+         */
+
+         
+                     public com.sforce.soap.partner.DescribeSObjectResponse describeSObject(
+
+                        com.sforce.soap.partner.DescribeSObject describeSObject,com.sforce.soap.partner.SessionHeader sessionHeader64,com.sforce.soap.partner.CallOptions callOptions65,com.sforce.soap.partner.PackageVersionHeader packageVersionHeader66,com.sforce.soap.partner.LocaleOptions localeOptions)
                         throws java.rmi.RemoteException
              
           ,com.sforce.soap.partner.InvalidSObjectFault
-          ,com.sforce.soap.partner.MalformedSearchFault
-          ,com.sforce.soap.partner.InvalidFieldFault
+          ,com.sforce.soap.partner.UnexpectedErrorFault;
+
+        
+
+        /**
+          * Auto generated method signature
+          * Describe the tabs that appear on a users page
+                    * @param describeTabs
+                
+                    * @param sessionHeader67
+                
+                    * @param callOptions68
+                
+                    * @param packageVersionHeader69
+                
+             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
+         */
+
+         
+                     public com.sforce.soap.partner.DescribeTabsResponse describeTabs(
+
+                        com.sforce.soap.partner.DescribeTabs describeTabs,com.sforce.soap.partner.SessionHeader sessionHeader67,com.sforce.soap.partner.CallOptions callOptions68,com.sforce.soap.partner.PackageVersionHeader packageVersionHeader69)
+                        throws java.rmi.RemoteException
+             
+          ,com.sforce.soap.partner.UnexpectedErrorFault;
+
+        
+
+        /**
+          * Auto generated method signature
+          * Describe a number sObjects
+                    * @param describeSObjects
+                
+                    * @param sessionHeader70
+                
+                    * @param callOptions71
+                
+                    * @param packageVersionHeader72
+                
+                    * @param localeOptions73
+                
+             * @throws com.sforce.soap.partner.InvalidSObjectFault : 
+             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
+         */
+
+         
+                     public com.sforce.soap.partner.DescribeSObjectsResponse describeSObjects(
+
+                        com.sforce.soap.partner.DescribeSObjects describeSObjects,com.sforce.soap.partner.SessionHeader sessionHeader70,com.sforce.soap.partner.CallOptions callOptions71,com.sforce.soap.partner.PackageVersionHeader packageVersionHeader72,com.sforce.soap.partner.LocaleOptions localeOptions73)
+                        throws java.rmi.RemoteException
+             
+          ,com.sforce.soap.partner.InvalidSObjectFault
+          ,com.sforce.soap.partner.UnexpectedErrorFault;
+
+        
+
+        /**
+          * Auto generated method signature
+          * Returns standard information relevant to the current user
+                    * @param getUserInfo
+                
+                    * @param sessionHeader74
+                
+                    * @param callOptions75
+                
+             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
+         */
+
+         
+                     public com.sforce.soap.partner.GetUserInfoResponse getUserInfo(
+
+                        com.sforce.soap.partner.GetUserInfo getUserInfo,com.sforce.soap.partner.SessionHeader sessionHeader74,com.sforce.soap.partner.CallOptions callOptions75)
+                        throws java.rmi.RemoteException
+             
+          ,com.sforce.soap.partner.UnexpectedErrorFault;
+
+        
+
+        /**
+          * Auto generated method signature
+          * Empty a set of sObjects from the recycle bin
+                    * @param emptyRecycleBin
+                
+                    * @param sessionHeader76
+                
+                    * @param callOptions77
+                
+             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
+         */
+
+         
+                     public com.sforce.soap.partner.EmptyRecycleBinResponse emptyRecycleBin(
+
+                        com.sforce.soap.partner.EmptyRecycleBin emptyRecycleBin,com.sforce.soap.partner.SessionHeader sessionHeader76,com.sforce.soap.partner.CallOptions callOptions77)
+                        throws java.rmi.RemoteException
+             
+          ,com.sforce.soap.partner.UnexpectedErrorFault;
+
+        
+
+        /**
+          * Auto generated method signature
+          * Describe the Global state
+                    * @param describeGlobal
+                
+                    * @param sessionHeader78
+                
+                    * @param callOptions79
+                
+                    * @param packageVersionHeader80
+                
+             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
+         */
+
+         
+                     public com.sforce.soap.partner.DescribeGlobalResponse describeGlobal(
+
+                        com.sforce.soap.partner.DescribeGlobal describeGlobal,com.sforce.soap.partner.SessionHeader sessionHeader78,com.sforce.soap.partner.CallOptions callOptions79,com.sforce.soap.partner.PackageVersionHeader packageVersionHeader80)
+                        throws java.rmi.RemoteException
+             
+          ,com.sforce.soap.partner.UnexpectedErrorFault;
+
+        
+
+        /**
+          * Auto generated method signature
+          * Send outbound email
+                    * @param sendEmail
+                
+                    * @param sessionHeader81
+                
+                    * @param callOptions82
+                
+             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
+         */
+
+         
+                     public com.sforce.soap.partner.SendEmailResponse sendEmail(
+
+                        com.sforce.soap.partner.SendEmail sendEmail,com.sforce.soap.partner.SessionHeader sessionHeader81,com.sforce.soap.partner.CallOptions callOptions82)
+                        throws java.rmi.RemoteException
+             
           ,com.sforce.soap.partner.UnexpectedErrorFault;
 
         
@@ -387,13 +701,15 @@
           * Create a Query Cursor
                     * @param query
                 
-                    * @param sessionHeader35
+                    * @param sessionHeader83
                 
-                    * @param callOptions36
+                    * @param callOptions84
                 
-                    * @param queryOptions37
+                    * @param queryOptions85
                 
-                    * @param mruHeader38
+                    * @param mruHeader86
+                
+                    * @param packageVersionHeader87
                 
              * @throws com.sforce.soap.partner.InvalidSObjectFault : 
              * @throws com.sforce.soap.partner.MalformedQueryFault : 
@@ -406,7 +722,7 @@
          
                      public com.sforce.soap.partner.QueryResponse query(
 
-                        com.sforce.soap.partner.Query query,com.sforce.soap.partner.SessionHeader sessionHeader35,com.sforce.soap.partner.CallOptions callOptions36,com.sforce.soap.partner.QueryOptions queryOptions37,com.sforce.soap.partner.MruHeader mruHeader38)
+                        com.sforce.soap.partner.Query query,com.sforce.soap.partner.SessionHeader sessionHeader83,com.sforce.soap.partner.CallOptions callOptions84,com.sforce.soap.partner.QueryOptions queryOptions85,com.sforce.soap.partner.MruHeader mruHeader86,com.sforce.soap.partner.PackageVersionHeader packageVersionHeader87)
                         throws java.rmi.RemoteException
              
           ,com.sforce.soap.partner.InvalidSObjectFault
@@ -420,228 +736,12 @@
 
         /**
           * Auto generated method signature
-          * Get the IDs for deleted sObjects
-                    * @param getDeleted
-                
-                    * @param sessionHeader39
-                
-                    * @param callOptions40
-                
-             * @throws com.sforce.soap.partner.InvalidSObjectFault : 
-             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
-         */
-
-         
-                     public com.sforce.soap.partner.GetDeletedResponse getDeleted(
-
-                        com.sforce.soap.partner.GetDeleted getDeleted,com.sforce.soap.partner.SessionHeader sessionHeader39,com.sforce.soap.partner.CallOptions callOptions40)
-                        throws java.rmi.RemoteException
-             
-          ,com.sforce.soap.partner.InvalidSObjectFault
-          ,com.sforce.soap.partner.UnexpectedErrorFault;
-
-        
-
-        /**
-          * Auto generated method signature
-          * Submit an entity to a workflow process or process a workitem
-                    * @param process
-                
-                    * @param sessionHeader41
-                
-                    * @param callOptions42
-                
-                    * @param debuggingHeader43
-                
-             * @throws com.sforce.soap.partner.InvalidIdFault : 
-             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
-         */
-
-         
-                     public com.sforce.soap.partner.ProcessResponse process(
-
-                        com.sforce.soap.partner.Process process,com.sforce.soap.partner.SessionHeader sessionHeader41,com.sforce.soap.partner.CallOptions callOptions42,com.sforce.soap.partner.DebuggingHeader debuggingHeader43)
-                        throws java.rmi.RemoteException
-             
-          ,com.sforce.soap.partner.InvalidIdFault
-          ,com.sforce.soap.partner.UnexpectedErrorFault;
-
-        
-
-        /**
-          * Auto generated method signature
-          * Reset a user's password
-                    * @param resetPassword
-                
-                    * @param sessionHeader44
-                
-                    * @param callOptions45
-                
-                    * @param emailHeader46
-                
-             * @throws com.sforce.soap.partner.InvalidIdFault : 
-             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
-         */
-
-         
-                     public com.sforce.soap.partner.ResetPasswordResponse resetPassword(
-
-                        com.sforce.soap.partner.ResetPassword resetPassword,com.sforce.soap.partner.SessionHeader sessionHeader44,com.sforce.soap.partner.CallOptions callOptions45,com.sforce.soap.partner.EmailHeader emailHeader46)
-                        throws java.rmi.RemoteException
-             
-          ,com.sforce.soap.partner.InvalidIdFault
-          ,com.sforce.soap.partner.UnexpectedErrorFault;
-
-        
-
-        /**
-          * Auto generated method signature
-          * Describe the Global state
-                    * @param describeGlobal
-                
-                    * @param sessionHeader47
-                
-                    * @param callOptions48
-                
-             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
-         */
-
-         
-                     public com.sforce.soap.partner.DescribeGlobalResponse describeGlobal(
-
-                        com.sforce.soap.partner.DescribeGlobal describeGlobal,com.sforce.soap.partner.SessionHeader sessionHeader47,com.sforce.soap.partner.CallOptions callOptions48)
-                        throws java.rmi.RemoteException
-             
-          ,com.sforce.soap.partner.UnexpectedErrorFault;
-
-        
-
-        /**
-          * Auto generated method signature
-          * Describe the layout of an sObject
-                    * @param describeLayout
-                
-                    * @param sessionHeader49
-                
-                    * @param callOptions50
-                
-             * @throws com.sforce.soap.partner.InvalidSObjectFault : 
-             * @throws com.sforce.soap.partner.InvalidIdFault : 
-             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
-         */
-
-         
-                     public com.sforce.soap.partner.DescribeLayoutResponse describeLayout(
-
-                        com.sforce.soap.partner.DescribeLayoutE describeLayout,com.sforce.soap.partner.SessionHeader sessionHeader49,com.sforce.soap.partner.CallOptions callOptions50)
-                        throws java.rmi.RemoteException
-             
-          ,com.sforce.soap.partner.InvalidSObjectFault
-          ,com.sforce.soap.partner.InvalidIdFault
-          ,com.sforce.soap.partner.UnexpectedErrorFault;
-
-        
-
-        /**
-          * Auto generated method signature
-          * Describe the tabs that appear on a users page
-                    * @param describeTabs
-                
-                    * @param sessionHeader51
-                
-                    * @param callOptions52
-                
-             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
-         */
-
-         
-                     public com.sforce.soap.partner.DescribeTabsResponse describeTabs(
-
-                        com.sforce.soap.partner.DescribeTabs describeTabs,com.sforce.soap.partner.SessionHeader sessionHeader51,com.sforce.soap.partner.CallOptions callOptions52)
-                        throws java.rmi.RemoteException
-             
-          ,com.sforce.soap.partner.UnexpectedErrorFault;
-
-        
-
-        /**
-          * Auto generated method signature
-          * Gets server timestamp
-                    * @param getServerTimestamp
-                
-                    * @param sessionHeader53
-                
-                    * @param callOptions54
-                
-             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
-         */
-
-         
-                     public com.sforce.soap.partner.GetServerTimestampResponse getServerTimestamp(
-
-                        com.sforce.soap.partner.GetServerTimestamp getServerTimestamp,com.sforce.soap.partner.SessionHeader sessionHeader53,com.sforce.soap.partner.CallOptions callOptions54)
-                        throws java.rmi.RemoteException
-             
-          ,com.sforce.soap.partner.UnexpectedErrorFault;
-
-        
-
-        /**
-          * Auto generated method signature
-          * Logs out and invalidates session ids
-                    * @param invalidateSessions
-                
-                    * @param sessionHeader55
-                
-                    * @param callOptions56
-                
-             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
-         */
-
-         
-                     public com.sforce.soap.partner.InvalidateSessionsResponse invalidateSessions(
-
-                        com.sforce.soap.partner.InvalidateSessions invalidateSessions,com.sforce.soap.partner.SessionHeader sessionHeader55,com.sforce.soap.partner.CallOptions callOptions56)
-                        throws java.rmi.RemoteException
-             
-          ,com.sforce.soap.partner.UnexpectedErrorFault;
-
-        
-
-        /**
-          * Auto generated method signature
-          * Describe an sObject
-                    * @param describeSObject
-                
-                    * @param sessionHeader57
-                
-                    * @param callOptions58
-                
-                    * @param localeOptions
-                
-             * @throws com.sforce.soap.partner.InvalidSObjectFault : 
-             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
-         */
-
-         
-                     public com.sforce.soap.partner.DescribeSObjectResponse describeSObject(
-
-                        com.sforce.soap.partner.DescribeSObject describeSObject,com.sforce.soap.partner.SessionHeader sessionHeader57,com.sforce.soap.partner.CallOptions callOptions58,com.sforce.soap.partner.LocaleOptions localeOptions)
-                        throws java.rmi.RemoteException
-             
-          ,com.sforce.soap.partner.InvalidSObjectFault
-          ,com.sforce.soap.partner.UnexpectedErrorFault;
-
-        
-
-        /**
-          * Auto generated method signature
           * Login to the Salesforce.com SOAP Api
                     * @param login
                 
                     * @param loginScopeHeader
                 
-                    * @param callOptions59
+                    * @param callOptions88
                 
              * @throws com.sforce.soap.partner.InvalidIdFault : 
              * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
@@ -651,7 +751,7 @@
          
                      public com.sforce.soap.partner.LoginResponse login(
 
-                        com.sforce.soap.partner.Login login,com.sforce.soap.partner.LoginScopeHeader loginScopeHeader,com.sforce.soap.partner.CallOptions callOptions59)
+                        com.sforce.soap.partner.Login login,com.sforce.soap.partner.LoginScopeHeader loginScopeHeader,com.sforce.soap.partner.CallOptions callOptions88)
                         throws java.rmi.RemoteException
              
           ,com.sforce.soap.partner.InvalidIdFault
@@ -662,96 +762,24 @@
 
         /**
           * Auto generated method signature
-          * Gets the next batch of sObjects from a query
-                    * @param queryMore
+          * Merge and update a set of sObjects based on object id
+                    * @param merge
                 
-                    * @param sessionHeader60
+                    * @param sessionHeader89
                 
-                    * @param callOptions61
+                    * @param callOptions90
                 
-                    * @param queryOptions62
+                    * @param assignmentRuleHeader91
                 
-             * @throws com.sforce.soap.partner.InvalidFieldFault : 
-             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
-             * @throws com.sforce.soap.partner.InvalidQueryLocatorFault : 
-         */
-
-         
-                     public com.sforce.soap.partner.QueryMoreResponse queryMore(
-
-                        com.sforce.soap.partner.QueryMore queryMore,com.sforce.soap.partner.SessionHeader sessionHeader60,com.sforce.soap.partner.CallOptions callOptions61,com.sforce.soap.partner.QueryOptions queryOptions62)
-                        throws java.rmi.RemoteException
-             
-          ,com.sforce.soap.partner.InvalidFieldFault
-          ,com.sforce.soap.partner.UnexpectedErrorFault
-          ,com.sforce.soap.partner.InvalidQueryLocatorFault;
-
-        
-
-        /**
-          * Auto generated method signature
-          * Describe a number sObjects
-                    * @param describeSObjects
+                    * @param mruHeader92
                 
-                    * @param sessionHeader63
+                    * @param allowFieldTruncationHeader93
                 
-                    * @param callOptions64
+                    * @param debuggingHeader94
                 
-                    * @param localeOptions65
+                    * @param packageVersionHeader95
                 
-             * @throws com.sforce.soap.partner.InvalidSObjectFault : 
-             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
-         */
-
-         
-                     public com.sforce.soap.partner.DescribeSObjectsResponse describeSObjects(
-
-                        com.sforce.soap.partner.DescribeSObjects describeSObjects,com.sforce.soap.partner.SessionHeader sessionHeader63,com.sforce.soap.partner.CallOptions callOptions64,com.sforce.soap.partner.LocaleOptions localeOptions65)
-                        throws java.rmi.RemoteException
-             
-          ,com.sforce.soap.partner.InvalidSObjectFault
-          ,com.sforce.soap.partner.UnexpectedErrorFault;
-
-        
-
-        /**
-          * Auto generated method signature
-          * Empty a set of sObjects from the recycle bin
-                    * @param emptyRecycleBin
-                
-                    * @param sessionHeader66
-                
-                    * @param callOptions67
-                
-             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
-         */
-
-         
-                     public com.sforce.soap.partner.EmptyRecycleBinResponse emptyRecycleBin(
-
-                        com.sforce.soap.partner.EmptyRecycleBin emptyRecycleBin,com.sforce.soap.partner.SessionHeader sessionHeader66,com.sforce.soap.partner.CallOptions callOptions67)
-                        throws java.rmi.RemoteException
-             
-          ,com.sforce.soap.partner.UnexpectedErrorFault;
-
-        
-
-        /**
-          * Auto generated method signature
-          * Update or insert a set of sObjects based on object id
-                    * @param upsert
-                
-                    * @param sessionHeader68
-                
-                    * @param callOptions69
-                
-                    * @param assignmentRuleHeader70
-                
-                    * @param mruHeader71
-                
-                    * @param debuggingHeader72
-                
-                    * @param emailHeader73
+                    * @param emailHeader96
                 
              * @throws com.sforce.soap.partner.InvalidSObjectFault : 
              * @throws com.sforce.soap.partner.InvalidIdFault : 
@@ -760,9 +788,9 @@
          */
 
          
-                     public com.sforce.soap.partner.UpsertResponse upsert(
+                     public com.sforce.soap.partner.MergeResponse merge(
 
-                        com.sforce.soap.partner.Upsert upsert,com.sforce.soap.partner.SessionHeader sessionHeader68,com.sforce.soap.partner.CallOptions callOptions69,com.sforce.soap.partner.AssignmentRuleHeader assignmentRuleHeader70,com.sforce.soap.partner.MruHeader mruHeader71,com.sforce.soap.partner.DebuggingHeader debuggingHeader72,com.sforce.soap.partner.EmailHeader emailHeader73)
+                        com.sforce.soap.partner.Merge merge,com.sforce.soap.partner.SessionHeader sessionHeader89,com.sforce.soap.partner.CallOptions callOptions90,com.sforce.soap.partner.AssignmentRuleHeader assignmentRuleHeader91,com.sforce.soap.partner.MruHeader mruHeader92,com.sforce.soap.partner.AllowFieldTruncationHeader allowFieldTruncationHeader93,com.sforce.soap.partner.DebuggingHeader debuggingHeader94,com.sforce.soap.partner.PackageVersionHeader packageVersionHeader95,com.sforce.soap.partner.EmailHeader emailHeader96)
                         throws java.rmi.RemoteException
              
           ,com.sforce.soap.partner.InvalidSObjectFault
@@ -774,22 +802,20 @@
 
         /**
           * Auto generated method signature
-          * convert a set of leads
-                    * @param convertLead
+          * Gets server timestamp
+                    * @param getServerTimestamp
                 
-                    * @param sessionHeader74
+                    * @param sessionHeader97
                 
-                    * @param callOptions75
-                
-                    * @param debuggingHeader76
+                    * @param callOptions98
                 
              * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
          */
 
          
-                     public com.sforce.soap.partner.ConvertLeadResponse convertLead(
+                     public com.sforce.soap.partner.GetServerTimestampResponse getServerTimestamp(
 
-                        com.sforce.soap.partner.ConvertLead convertLead,com.sforce.soap.partner.SessionHeader sessionHeader74,com.sforce.soap.partner.CallOptions callOptions75,com.sforce.soap.partner.DebuggingHeader debuggingHeader76)
+                        com.sforce.soap.partner.GetServerTimestamp getServerTimestamp,com.sforce.soap.partner.SessionHeader sessionHeader97,com.sforce.soap.partner.CallOptions callOptions98)
                         throws java.rmi.RemoteException
              
           ,com.sforce.soap.partner.UnexpectedErrorFault;
@@ -798,28 +824,52 @@
 
         /**
           * Auto generated method signature
-          * Delete a set of sObjects
-                    * @param delete
+          * Get the IDs for updated sObjects
+                    * @param getUpdated
                 
-                    * @param sessionHeader77
+                    * @param sessionHeader99
                 
-                    * @param callOptions78
+                    * @param callOptions100
                 
-                    * @param userTerritoryDeleteHeader
-                
-                    * @param emailHeader79
-                
-                    * @param debuggingHeader80
-                
+             * @throws com.sforce.soap.partner.InvalidSObjectFault : 
              * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
          */
 
          
-                     public com.sforce.soap.partner.DeleteResponse delete(
+                     public com.sforce.soap.partner.GetUpdatedResponse getUpdated(
 
-                        com.sforce.soap.partner.Delete delete,com.sforce.soap.partner.SessionHeader sessionHeader77,com.sforce.soap.partner.CallOptions callOptions78,com.sforce.soap.partner.UserTerritoryDeleteHeader userTerritoryDeleteHeader,com.sforce.soap.partner.EmailHeader emailHeader79,com.sforce.soap.partner.DebuggingHeader debuggingHeader80)
+                        com.sforce.soap.partner.GetUpdated getUpdated,com.sforce.soap.partner.SessionHeader sessionHeader99,com.sforce.soap.partner.CallOptions callOptions100)
                         throws java.rmi.RemoteException
              
+          ,com.sforce.soap.partner.InvalidSObjectFault
+          ,com.sforce.soap.partner.UnexpectedErrorFault;
+
+        
+
+        /**
+          * Auto generated method signature
+          * Describe the layout of an sObject
+                    * @param describeLayout
+                
+                    * @param sessionHeader101
+                
+                    * @param callOptions102
+                
+                    * @param packageVersionHeader103
+                
+             * @throws com.sforce.soap.partner.InvalidSObjectFault : 
+             * @throws com.sforce.soap.partner.InvalidIdFault : 
+             * @throws com.sforce.soap.partner.UnexpectedErrorFault : 
+         */
+
+         
+                     public com.sforce.soap.partner.DescribeLayoutResponse describeLayout(
+
+                        com.sforce.soap.partner.DescribeLayoutE describeLayout,com.sforce.soap.partner.SessionHeader sessionHeader101,com.sforce.soap.partner.CallOptions callOptions102,com.sforce.soap.partner.PackageVersionHeader packageVersionHeader103)
+                        throws java.rmi.RemoteException
+             
+          ,com.sforce.soap.partner.InvalidSObjectFault
+          ,com.sforce.soap.partner.InvalidIdFault
           ,com.sforce.soap.partner.UnexpectedErrorFault;
 
         

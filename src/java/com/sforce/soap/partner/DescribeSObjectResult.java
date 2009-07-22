@@ -3,7 +3,7 @@
  * DescribeSObjectResult.java
  *
  * This file was auto-generated from WSDL
- * by the Apache Axis2 version: 1.4.1  Built on : Aug 13, 2008 (05:03:41 LKT)
+ * by the Apache Axis2 version: 1.5  Built on : Apr 30, 2009 (06:07:47 EDT)
  */
             
                 package com.sforce.soap.partner;
@@ -228,6 +228,96 @@
                                public void setDeletable(boolean param){
                             
                                             this.localDeletable=param;
+                                    
+
+                               }
+                            
+
+                        /**
+                        * field for Deprecated
+                        */
+
+                        
+                                    protected boolean localDeprecated ;
+                                
+                           /*  This tracker boolean wil be used to detect whether the user called the set method
+                          *   for this attribute. It will be used to determine whether to include this field
+                           *   in the serialized XML
+                           */
+                           protected boolean localDeprecatedTracker = false ;
+                           
+
+                           /**
+                           * Auto generated getter method
+                           * @return boolean
+                           */
+                           public  boolean getDeprecated(){
+                               return localDeprecated;
+                           }
+
+                           
+                        
+                            /**
+                               * Auto generated setter method
+                               * @param param Deprecated
+                               */
+                               public void setDeprecated(boolean param){
+                            
+                                       // setting primitive attribute tracker to true
+                                       
+                                               if (false) {
+                                           localDeprecatedTracker = false;
+                                              
+                                       } else {
+                                          localDeprecatedTracker = true;
+                                       }
+                                   
+                                            this.localDeprecated=param;
+                                    
+
+                               }
+                            
+
+                        /**
+                        * field for DeprecatedAndHidden
+                        */
+
+                        
+                                    protected boolean localDeprecatedAndHidden ;
+                                
+                           /*  This tracker boolean wil be used to detect whether the user called the set method
+                          *   for this attribute. It will be used to determine whether to include this field
+                           *   in the serialized XML
+                           */
+                           protected boolean localDeprecatedAndHiddenTracker = false ;
+                           
+
+                           /**
+                           * Auto generated getter method
+                           * @return boolean
+                           */
+                           public  boolean getDeprecatedAndHidden(){
+                               return localDeprecatedAndHidden;
+                           }
+
+                           
+                        
+                            /**
+                               * Auto generated setter method
+                               * @param param DeprecatedAndHidden
+                               */
+                               public void setDeprecatedAndHidden(boolean param){
+                            
+                                       // setting primitive attribute tracker to true
+                                       
+                                               if (false) {
+                                           localDeprecatedAndHiddenTracker = false;
+                                              
+                                       } else {
+                                          localDeprecatedAndHiddenTracker = true;
+                                       }
+                                   
+                                            this.localDeprecatedAndHidden=param;
                                     
 
                                }
@@ -1122,7 +1212,65 @@
                                                }
                                     
                                    xmlWriter.writeEndElement();
-                              if (localFieldsTracker){
+                              if (localDeprecatedTracker){
+                                    namespace = "urn:partner.soap.sforce.com";
+                                    if (! namespace.equals("")) {
+                                        prefix = xmlWriter.getPrefix(namespace);
+
+                                        if (prefix == null) {
+                                            prefix = generatePrefix(namespace);
+
+                                            xmlWriter.writeStartElement(prefix,"deprecated", namespace);
+                                            xmlWriter.writeNamespace(prefix, namespace);
+                                            xmlWriter.setPrefix(prefix, namespace);
+
+                                        } else {
+                                            xmlWriter.writeStartElement(namespace,"deprecated");
+                                        }
+
+                                    } else {
+                                        xmlWriter.writeStartElement("deprecated");
+                                    }
+                                
+                                               if (false) {
+                                           
+                                                         throw new org.apache.axis2.databinding.ADBException("deprecated cannot be null!!");
+                                                      
+                                               } else {
+                                                    xmlWriter.writeCharacters(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localDeprecated));
+                                               }
+                                    
+                                   xmlWriter.writeEndElement();
+                             } if (localDeprecatedAndHiddenTracker){
+                                    namespace = "urn:partner.soap.sforce.com";
+                                    if (! namespace.equals("")) {
+                                        prefix = xmlWriter.getPrefix(namespace);
+
+                                        if (prefix == null) {
+                                            prefix = generatePrefix(namespace);
+
+                                            xmlWriter.writeStartElement(prefix,"deprecatedAndHidden", namespace);
+                                            xmlWriter.writeNamespace(prefix, namespace);
+                                            xmlWriter.setPrefix(prefix, namespace);
+
+                                        } else {
+                                            xmlWriter.writeStartElement(namespace,"deprecatedAndHidden");
+                                        }
+
+                                    } else {
+                                        xmlWriter.writeStartElement("deprecatedAndHidden");
+                                    }
+                                
+                                               if (false) {
+                                           
+                                                         throw new org.apache.axis2.databinding.ADBException("deprecatedAndHidden cannot be null!!");
+                                                      
+                                               } else {
+                                                    xmlWriter.writeCharacters(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localDeprecatedAndHidden));
+                                               }
+                                    
+                                   xmlWriter.writeEndElement();
+                             } if (localFieldsTracker){
                                        if (localFields!=null){
                                             for (int i = 0;i < localFields.length;i++){
                                                 if (localFields[i] != null){
@@ -1908,7 +2056,19 @@
                                  
                                 elementList.add(
                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localDeletable));
-                             if (localFieldsTracker){
+                             if (localDeprecatedTracker){
+                                      elementList.add(new javax.xml.namespace.QName("urn:partner.soap.sforce.com",
+                                                                      "deprecated"));
+                                 
+                                elementList.add(
+                                   org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localDeprecated));
+                            } if (localDeprecatedAndHiddenTracker){
+                                      elementList.add(new javax.xml.namespace.QName("urn:partner.soap.sforce.com",
+                                                                      "deprecatedAndHidden"));
+                                 
+                                elementList.add(
+                                   org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localDeprecatedAndHidden));
+                            } if (localFieldsTracker){
                              if (localFields!=null) {
                                  for (int i = 0;i < localFields.length;i++){
 
@@ -2137,9 +2297,9 @@
                 
                         java.util.ArrayList list2 = new java.util.ArrayList();
                     
-                        java.util.ArrayList list6 = new java.util.ArrayList();
+                        java.util.ArrayList list8 = new java.util.ArrayList();
                     
-                        java.util.ArrayList list14 = new java.util.ArrayList();
+                        java.util.ArrayList list16 = new java.util.ArrayList();
                     
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
@@ -2266,6 +2426,42 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("urn:partner.soap.sforce.com","deprecated").equals(reader.getName())){
+                                
+                                    java.lang.String content = reader.getElementText();
+                                    
+                                              object.setDeprecated(
+                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToBoolean(content));
+                                              
+                                        reader.next();
+                                    
+                              }  // End of if for expected property start element
+                                
+                                    else {
+                                        
+                                    }
+                                
+                                    
+                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+                                
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("urn:partner.soap.sforce.com","deprecatedAndHidden").equals(reader.getName())){
+                                
+                                    java.lang.String content = reader.getElementText();
+                                    
+                                              object.setDeprecatedAndHidden(
+                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToBoolean(content));
+                                              
+                                        reader.next();
+                                    
+                              }  // End of if for expected property start element
+                                
+                                    else {
+                                        
+                                    }
+                                
+                                    
+                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+                                
                                     if (reader.isStartElement() && new javax.xml.namespace.QName("urn:partner.soap.sforce.com","fields").equals(reader.getName())){
                                 
                                     
@@ -2274,14 +2470,14 @@
                                     
                                                           nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
                                                           if ("true".equals(nillableValue) || "1".equals(nillableValue)){
-                                                              list6.add(null);
+                                                              list8.add(null);
                                                               reader.next();
                                                           } else {
-                                                        list6.add(com.sforce.soap.partner.Field.Factory.parse(reader));
+                                                        list8.add(com.sforce.soap.partner.Field.Factory.parse(reader));
                                                                 }
                                                         //loop until we find a start element that is not part of this array
-                                                        boolean loopDone6 = false;
-                                                        while(!loopDone6){
+                                                        boolean loopDone8 = false;
+                                                        while(!loopDone8){
                                                             // We should be at the end element, but make sure
                                                             while (!reader.isEndElement())
                                                                 reader.next();
@@ -2292,19 +2488,19 @@
                                                                 reader.next();
                                                             if (reader.isEndElement()){
                                                                 //two continuous end elements means we are exiting the xml structure
-                                                                loopDone6 = true;
+                                                                loopDone8 = true;
                                                             } else {
                                                                 if (new javax.xml.namespace.QName("urn:partner.soap.sforce.com","fields").equals(reader.getName())){
                                                                     
                                                                       nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
                                                                       if ("true".equals(nillableValue) || "1".equals(nillableValue)){
-                                                                          list6.add(null);
+                                                                          list8.add(null);
                                                                           reader.next();
                                                                       } else {
-                                                                    list6.add(com.sforce.soap.partner.Field.Factory.parse(reader));
+                                                                    list8.add(com.sforce.soap.partner.Field.Factory.parse(reader));
                                                                         }
                                                                 }else{
-                                                                    loopDone6 = true;
+                                                                    loopDone8 = true;
                                                                 }
                                                             }
                                                         }
@@ -2313,7 +2509,7 @@
                                                         object.setFields((com.sforce.soap.partner.Field[])
                                                             org.apache.axis2.databinding.utils.ConverterUtil.convertToArray(
                                                                 com.sforce.soap.partner.Field.class,
-                                                                list6));
+                                                                list8));
                                                             
                               }  // End of if for expected property start element
                                 
@@ -2471,11 +2667,11 @@
                                     
                                     
                                     // Process the array and step past its final element's end.
-                                    list14.add(com.sforce.soap.partner.RecordTypeInfo.Factory.parse(reader));
+                                    list16.add(com.sforce.soap.partner.RecordTypeInfo.Factory.parse(reader));
                                                                 
                                                         //loop until we find a start element that is not part of this array
-                                                        boolean loopDone14 = false;
-                                                        while(!loopDone14){
+                                                        boolean loopDone16 = false;
+                                                        while(!loopDone16){
                                                             // We should be at the end element, but make sure
                                                             while (!reader.isEndElement())
                                                                 reader.next();
@@ -2486,13 +2682,13 @@
                                                                 reader.next();
                                                             if (reader.isEndElement()){
                                                                 //two continuous end elements means we are exiting the xml structure
-                                                                loopDone14 = true;
+                                                                loopDone16 = true;
                                                             } else {
                                                                 if (new javax.xml.namespace.QName("urn:partner.soap.sforce.com","recordTypeInfos").equals(reader.getName())){
-                                                                    list14.add(com.sforce.soap.partner.RecordTypeInfo.Factory.parse(reader));
+                                                                    list16.add(com.sforce.soap.partner.RecordTypeInfo.Factory.parse(reader));
                                                                         
                                                                 }else{
-                                                                    loopDone14 = true;
+                                                                    loopDone16 = true;
                                                                 }
                                                             }
                                                         }
@@ -2501,7 +2697,7 @@
                                                         object.setRecordTypeInfos((com.sforce.soap.partner.RecordTypeInfo[])
                                                             org.apache.axis2.databinding.utils.ConverterUtil.convertToArray(
                                                                 com.sforce.soap.partner.RecordTypeInfo.class,
-                                                                list14));
+                                                                list16));
                                                             
                               }  // End of if for expected property start element
                                 

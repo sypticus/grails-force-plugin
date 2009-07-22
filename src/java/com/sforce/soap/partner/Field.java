@@ -3,7 +3,7 @@
  * Field.java
  *
  * This file was auto-generated from WSDL
- * by the Apache Axis2 version: 1.4.1  Built on : Aug 13, 2008 (05:03:41 LKT)
+ * by the Apache Axis2 version: 1.5  Built on : Apr 30, 2009 (06:07:47 EDT)
  */
             
                 package com.sforce.soap.partner;
@@ -413,6 +413,96 @@
                                        }
                                    
                                             this.localDependentPicklist=param;
+                                    
+
+                               }
+                            
+
+                        /**
+                        * field for Deprecated
+                        */
+
+                        
+                                    protected boolean localDeprecated ;
+                                
+                           /*  This tracker boolean wil be used to detect whether the user called the set method
+                          *   for this attribute. It will be used to determine whether to include this field
+                           *   in the serialized XML
+                           */
+                           protected boolean localDeprecatedTracker = false ;
+                           
+
+                           /**
+                           * Auto generated getter method
+                           * @return boolean
+                           */
+                           public  boolean getDeprecated(){
+                               return localDeprecated;
+                           }
+
+                           
+                        
+                            /**
+                               * Auto generated setter method
+                               * @param param Deprecated
+                               */
+                               public void setDeprecated(boolean param){
+                            
+                                       // setting primitive attribute tracker to true
+                                       
+                                               if (false) {
+                                           localDeprecatedTracker = false;
+                                              
+                                       } else {
+                                          localDeprecatedTracker = true;
+                                       }
+                                   
+                                            this.localDeprecated=param;
+                                    
+
+                               }
+                            
+
+                        /**
+                        * field for DeprecatedAndHidden
+                        */
+
+                        
+                                    protected boolean localDeprecatedAndHidden ;
+                                
+                           /*  This tracker boolean wil be used to detect whether the user called the set method
+                          *   for this attribute. It will be used to determine whether to include this field
+                           *   in the serialized XML
+                           */
+                           protected boolean localDeprecatedAndHiddenTracker = false ;
+                           
+
+                           /**
+                           * Auto generated getter method
+                           * @return boolean
+                           */
+                           public  boolean getDeprecatedAndHidden(){
+                               return localDeprecatedAndHidden;
+                           }
+
+                           
+                        
+                            /**
+                               * Auto generated setter method
+                               * @param param DeprecatedAndHidden
+                               */
+                               public void setDeprecatedAndHidden(boolean param){
+                            
+                                       // setting primitive attribute tracker to true
+                                       
+                                               if (false) {
+                                           localDeprecatedAndHiddenTracker = false;
+                                              
+                                       } else {
+                                          localDeprecatedAndHiddenTracker = true;
+                                       }
+                                   
+                                            this.localDeprecatedAndHidden=param;
                                     
 
                                }
@@ -1820,6 +1910,64 @@
                                                }
                                     
                                    xmlWriter.writeEndElement();
+                             } if (localDeprecatedTracker){
+                                    namespace = "urn:partner.soap.sforce.com";
+                                    if (! namespace.equals("")) {
+                                        prefix = xmlWriter.getPrefix(namespace);
+
+                                        if (prefix == null) {
+                                            prefix = generatePrefix(namespace);
+
+                                            xmlWriter.writeStartElement(prefix,"deprecated", namespace);
+                                            xmlWriter.writeNamespace(prefix, namespace);
+                                            xmlWriter.setPrefix(prefix, namespace);
+
+                                        } else {
+                                            xmlWriter.writeStartElement(namespace,"deprecated");
+                                        }
+
+                                    } else {
+                                        xmlWriter.writeStartElement("deprecated");
+                                    }
+                                
+                                               if (false) {
+                                           
+                                                         throw new org.apache.axis2.databinding.ADBException("deprecated cannot be null!!");
+                                                      
+                                               } else {
+                                                    xmlWriter.writeCharacters(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localDeprecated));
+                                               }
+                                    
+                                   xmlWriter.writeEndElement();
+                             } if (localDeprecatedAndHiddenTracker){
+                                    namespace = "urn:partner.soap.sforce.com";
+                                    if (! namespace.equals("")) {
+                                        prefix = xmlWriter.getPrefix(namespace);
+
+                                        if (prefix == null) {
+                                            prefix = generatePrefix(namespace);
+
+                                            xmlWriter.writeStartElement(prefix,"deprecatedAndHidden", namespace);
+                                            xmlWriter.writeNamespace(prefix, namespace);
+                                            xmlWriter.setPrefix(prefix, namespace);
+
+                                        } else {
+                                            xmlWriter.writeStartElement(namespace,"deprecatedAndHidden");
+                                        }
+
+                                    } else {
+                                        xmlWriter.writeStartElement("deprecatedAndHidden");
+                                    }
+                                
+                                               if (false) {
+                                           
+                                                         throw new org.apache.axis2.databinding.ADBException("deprecatedAndHidden cannot be null!!");
+                                                      
+                                               } else {
+                                                    xmlWriter.writeCharacters(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localDeprecatedAndHidden));
+                                               }
+                                    
+                                   xmlWriter.writeEndElement();
                              }
                                     namespace = "urn:partner.soap.sforce.com";
                                     if (! namespace.equals("")) {
@@ -2846,6 +2994,18 @@
                                  
                                 elementList.add(
                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localDependentPicklist));
+                            } if (localDeprecatedTracker){
+                                      elementList.add(new javax.xml.namespace.QName("urn:partner.soap.sforce.com",
+                                                                      "deprecated"));
+                                 
+                                elementList.add(
+                                   org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localDeprecated));
+                            } if (localDeprecatedAndHiddenTracker){
+                                      elementList.add(new javax.xml.namespace.QName("urn:partner.soap.sforce.com",
+                                                                      "deprecatedAndHidden"));
+                                 
+                                elementList.add(
+                                   org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localDeprecatedAndHidden));
                             }
                                       elementList.add(new javax.xml.namespace.QName("urn:partner.soap.sforce.com",
                                                                       "digits"));
@@ -3130,9 +3290,9 @@
                     
                     reader.next();
                 
-                        java.util.ArrayList list24 = new java.util.ArrayList();
-                    
                         java.util.ArrayList list26 = new java.util.ArrayList();
+                    
+                        java.util.ArrayList list28 = new java.util.ArrayList();
                     
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
@@ -3329,6 +3489,42 @@
                                     java.lang.String content = reader.getElementText();
                                     
                                               object.setDependentPicklist(
+                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToBoolean(content));
+                                              
+                                        reader.next();
+                                    
+                              }  // End of if for expected property start element
+                                
+                                    else {
+                                        
+                                    }
+                                
+                                    
+                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+                                
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("urn:partner.soap.sforce.com","deprecated").equals(reader.getName())){
+                                
+                                    java.lang.String content = reader.getElementText();
+                                    
+                                              object.setDeprecated(
+                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToBoolean(content));
+                                              
+                                        reader.next();
+                                    
+                              }  // End of if for expected property start element
+                                
+                                    else {
+                                        
+                                    }
+                                
+                                    
+                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+                                
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("urn:partner.soap.sforce.com","deprecatedAndHidden").equals(reader.getName())){
+                                
+                                    java.lang.String content = reader.getElementText();
+                                    
+                                              object.setDeprecatedAndHidden(
                                                     org.apache.axis2.databinding.utils.ConverterUtil.convertToBoolean(content));
                                               
                                         reader.next();
@@ -3574,14 +3770,14 @@
                                     
                                                           nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
                                                           if ("true".equals(nillableValue) || "1".equals(nillableValue)){
-                                                              list24.add(null);
+                                                              list26.add(null);
                                                               reader.next();
                                                           } else {
-                                                        list24.add(com.sforce.soap.partner.PicklistEntry.Factory.parse(reader));
+                                                        list26.add(com.sforce.soap.partner.PicklistEntry.Factory.parse(reader));
                                                                 }
                                                         //loop until we find a start element that is not part of this array
-                                                        boolean loopDone24 = false;
-                                                        while(!loopDone24){
+                                                        boolean loopDone26 = false;
+                                                        while(!loopDone26){
                                                             // We should be at the end element, but make sure
                                                             while (!reader.isEndElement())
                                                                 reader.next();
@@ -3592,19 +3788,19 @@
                                                                 reader.next();
                                                             if (reader.isEndElement()){
                                                                 //two continuous end elements means we are exiting the xml structure
-                                                                loopDone24 = true;
+                                                                loopDone26 = true;
                                                             } else {
                                                                 if (new javax.xml.namespace.QName("urn:partner.soap.sforce.com","picklistValues").equals(reader.getName())){
                                                                     
                                                                       nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
                                                                       if ("true".equals(nillableValue) || "1".equals(nillableValue)){
-                                                                          list24.add(null);
+                                                                          list26.add(null);
                                                                           reader.next();
                                                                       } else {
-                                                                    list24.add(com.sforce.soap.partner.PicklistEntry.Factory.parse(reader));
+                                                                    list26.add(com.sforce.soap.partner.PicklistEntry.Factory.parse(reader));
                                                                         }
                                                                 }else{
-                                                                    loopDone24 = true;
+                                                                    loopDone26 = true;
                                                                 }
                                                             }
                                                         }
@@ -3613,7 +3809,7 @@
                                                         object.setPicklistValues((com.sforce.soap.partner.PicklistEntry[])
                                                             org.apache.axis2.databinding.utils.ConverterUtil.convertToArray(
                                                                 com.sforce.soap.partner.PicklistEntry.class,
-                                                                list24));
+                                                                list26));
                                                             
                               }  // End of if for expected property start element
                                 
@@ -3651,15 +3847,15 @@
                                     
                                               nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
                                               if ("true".equals(nillableValue) || "1".equals(nillableValue)){
-                                                  list26.add(null);
+                                                  list28.add(null);
                                                        
                                                   reader.next();
                                               } else {
-                                            list26.add(reader.getElementText());
+                                            list28.add(reader.getElementText());
                                             }
                                             //loop until we find a start element that is not part of this array
-                                            boolean loopDone26 = false;
-                                            while(!loopDone26){
+                                            boolean loopDone28 = false;
+                                            while(!loopDone28){
                                                 // Ensure we are at the EndElement
                                                 while (!reader.isEndElement()){
                                                     reader.next();
@@ -3671,27 +3867,27 @@
                                                     reader.next();
                                                 if (reader.isEndElement()){
                                                     //two continuous end elements means we are exiting the xml structure
-                                                    loopDone26 = true;
+                                                    loopDone28 = true;
                                                 } else {
                                                     if (new javax.xml.namespace.QName("urn:partner.soap.sforce.com","referenceTo").equals(reader.getName())){
                                                          
                                                           nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
                                                           if ("true".equals(nillableValue) || "1".equals(nillableValue)){
-                                                              list26.add(null);
+                                                              list28.add(null);
                                                                    
                                                               reader.next();
                                                           } else {
-                                                        list26.add(reader.getElementText());
+                                                        list28.add(reader.getElementText());
                                                         }
                                                     }else{
-                                                        loopDone26 = true;
+                                                        loopDone28 = true;
                                                     }
                                                 }
                                             }
                                             // call the converter utility  to convert and set the array
                                             
                                                     object.setReferenceTo((java.lang.String[])
-                                                        list26.toArray(new java.lang.String[list26.size()]));
+                                                        list28.toArray(new java.lang.String[list28.size()]));
                                                 
                               }  // End of if for expected property start element
                                 

@@ -3,7 +3,7 @@
  * StatusCode.java
  *
  * This file was auto-generated from WSDL
- * by the Apache Axis2 version: 1.4.1  Built on : Aug 13, 2008 (05:03:41 LKT)
+ * by the Apache Axis2 version: 1.5  Built on : Apr 30, 2009 (06:07:47 EDT)
  */
             
                 package com.sforce.soap.partner;
@@ -166,6 +166,9 @@
                                 
                                     public static final java.lang.String _DUPLICATE_MASTER_LABEL =
                                         org.apache.axis2.databinding.utils.ConverterUtil.convertToString("DUPLICATE_MASTER_LABEL");
+                                
+                                    public static final java.lang.String _DUPLICATE_SENDER_DISPLAY_NAME =
+                                        org.apache.axis2.databinding.utils.ConverterUtil.convertToString("DUPLICATE_SENDER_DISPLAY_NAME");
                                 
                                     public static final java.lang.String _DUPLICATE_USERNAME =
                                         org.apache.axis2.databinding.utils.ConverterUtil.convertToString("DUPLICATE_USERNAME");
@@ -401,6 +404,9 @@
                                     public static final java.lang.String _NO_ATTACHMENT_PERMISSION =
                                         org.apache.axis2.databinding.utils.ConverterUtil.convertToString("NO_ATTACHMENT_PERMISSION");
                                 
+                                    public static final java.lang.String _NO_INACTIVE_DIVISION_MEMBERS =
+                                        org.apache.axis2.databinding.utils.ConverterUtil.convertToString("NO_INACTIVE_DIVISION_MEMBERS");
+                                
                                     public static final java.lang.String _NO_MASS_MAIL_PERMISSION =
                                         org.apache.axis2.databinding.utils.ConverterUtil.convertToString("NO_MASS_MAIL_PERMISSION");
                                 
@@ -484,6 +490,9 @@
                                 
                                     public static final java.lang.String _UNSUPPORTED_APEX_TRIGGER_OPERATON =
                                         org.apache.axis2.databinding.utils.ConverterUtil.convertToString("UNSUPPORTED_APEX_TRIGGER_OPERATON");
+                                
+                                    public static final java.lang.String _UNVERIFIED_SENDER_ADDRESS =
+                                        org.apache.axis2.databinding.utils.ConverterUtil.convertToString("UNVERIFIED_SENDER_ADDRESS");
                                 
                                     public static final java.lang.String _WEBLINK_SIZE_LIMIT_EXCEEDED =
                                         org.apache.axis2.databinding.utils.ConverterUtil.convertToString("WEBLINK_SIZE_LIMIT_EXCEEDED");
@@ -604,6 +613,9 @@
                             
                                 public static final StatusCode DUPLICATE_MASTER_LABEL =
                                     new StatusCode(_DUPLICATE_MASTER_LABEL,true);
+                            
+                                public static final StatusCode DUPLICATE_SENDER_DISPLAY_NAME =
+                                    new StatusCode(_DUPLICATE_SENDER_DISPLAY_NAME,true);
                             
                                 public static final StatusCode DUPLICATE_USERNAME =
                                     new StatusCode(_DUPLICATE_USERNAME,true);
@@ -839,6 +851,9 @@
                                 public static final StatusCode NO_ATTACHMENT_PERMISSION =
                                     new StatusCode(_NO_ATTACHMENT_PERMISSION,true);
                             
+                                public static final StatusCode NO_INACTIVE_DIVISION_MEMBERS =
+                                    new StatusCode(_NO_INACTIVE_DIVISION_MEMBERS,true);
+                            
                                 public static final StatusCode NO_MASS_MAIL_PERMISSION =
                                     new StatusCode(_NO_MASS_MAIL_PERMISSION,true);
                             
@@ -922,6 +937,9 @@
                             
                                 public static final StatusCode UNSUPPORTED_APEX_TRIGGER_OPERATON =
                                     new StatusCode(_UNSUPPORTED_APEX_TRIGGER_OPERATON,true);
+                            
+                                public static final StatusCode UNVERIFIED_SENDER_ADDRESS =
+                                    new StatusCode(_UNVERIFIED_SENDER_ADDRESS,true);
                             
                                 public static final StatusCode WEBLINK_SIZE_LIMIT_EXCEEDED =
                                     new StatusCode(_WEBLINK_SIZE_LIMIT_EXCEEDED,true);

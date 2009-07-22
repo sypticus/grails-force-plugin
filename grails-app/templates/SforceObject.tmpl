@@ -76,6 +76,9 @@ for( field in TYPE_DESC.getFields() ) {
         case "multipicklist":
             fieldType = "List"
             break
+        case "currency":
+            fieldType = "Double"
+            break
         default:
             fieldType = "String"
             break

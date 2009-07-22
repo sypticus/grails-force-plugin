@@ -143,7 +143,7 @@ class SalesForceBaseServiceTests extends GroovyTestCase {
     }*/
 
 
-    void testDomainObjects() {
+    /*void testDomainObjects() {
         TestObject tst1 = new TestObject()
         TestObject tst2 = new TestObject()
 
@@ -159,5 +159,12 @@ class SalesForceBaseServiceTests extends GroovyTestCase {
         sfTst.copyFrom(tst1)
         sfTst.toSalesforceObject()
         sfTst.save(flush:true)
+    }*/
+
+    void testProperties() {
+
+        def objs = salesForceService.getAllObjects(com.riptideforce.sfdc.Property.class)
+
+        salesForceService.updateObjects( objs[1] )
     }
 }

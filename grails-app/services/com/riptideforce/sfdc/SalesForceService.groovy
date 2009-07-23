@@ -54,7 +54,7 @@ class SalesForceService extends SalesForceBaseService {
      * The class must be mapped as a Salesforce object.
      */
     public
-    Object getObjectById( Class<?> type, String Id ) {
+    Object getObjectById( Class<?> type, String id ) {
 
         SalesforceObject objAnnot = type.getAnnotation( SalesforceObject.class )
 
@@ -73,8 +73,8 @@ class SalesForceService extends SalesForceBaseService {
             }
         }
 
-        String id = "'" + id + "'"
-        return this.buildObject( type, fetch("Select ${fieldStr} from ${objAnnot.name()} where ID = " + id) )
+        String idStr = "'${id}'"
+        return this.buildObject( type, fetch("Select ${fieldStr} from ${objAnnot.name()} where ID = ${idStr}") )
     }
 
     /**

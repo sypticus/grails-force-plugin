@@ -142,7 +142,7 @@ class SalesForceCodeGenService extends SalesForceBaseService {
         }
 
         // Get the object names
-        String[] objectNames = this.getObjectNames()
+        String[] objectNames = [objectName] as String[]
         // Get the objects Descriptions
         DescribeSObjectResult[] objectDescs =
             this.getFieldsForObjectTypes( objectNames )

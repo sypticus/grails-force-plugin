@@ -4,7 +4,7 @@ import com.sforce.soap.partner.*
 import org.springframework.beans.factory.InitializingBean
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import com.sforce.soap.partner.sobject.SObject
-
+import grails.util.GrailsUtil
 
 class SalesForceBaseService implements InitializingBean {
 
@@ -21,13 +21,31 @@ class SalesForceBaseService implements InitializingBean {
 
 
     void afterPropertiesSet() {
-        this.userName = ConfigurationHolder.config.salesforce.user
-        this.password = ConfigurationHolder.config.salesforce.password
-        if( ConfigurationHolder.config.salesforce.loginThreshold ) {
-            this.loginThreshold = ConfigurationHolder.config.salesforce.loginThreshold
+        
+        // Check for environment based configuration first
+        def env = GrailsUtil.getEnvironment()
+        
+        if( ConfigurationHolder.config.salesforce."${env}" ) {
+            this.userName = ConfigurationHolder.config.salesforce."${env}".user
+            this.password = ConfigurationHolder.config.salesforce."${env}".password
+            if( ConfigurationHolder.config.salesforce."${env}".loginThreshold ) {
+                this.loginThreshold = ConfigurationHolder.config.salesforce."${env}".loginThreshold
+            }
+            else {
+                this.loginThreshold = 3600000
+            }
         }
+        // Otherwise, check for the absolute configuration 
+        // (Deprecated. Only for backwards compatibility)
         else {
-            this.loginThreshold = 3600000
+            this.userName = ConfigurationHolder.config.salesforce.user
+            this.password = ConfigurationHolder.config.salesforce.password
+            if( ConfigurationHolder.config.salesforce.loginThreshold ) {
+                this.loginThreshold = ConfigurationHolder.config.salesforce.loginThreshold
+            }
+            else {
+                this.loginThreshold = 3600000
+            }
         }
     }
 
@@ -488,7 +506,7 @@ class SalesForceBaseService implements InitializingBean {
     /*
      * Deletes a series of SObjects given multiple Ids
      */
-    public DeleteResult[] delete(String ... ids){
+    public SalesforceResponse delete(String ... ids){
 	    if (this.loginRequired()) {
             if (!login()) {
                 return;
@@ -522,10 +540,35 @@ class SalesForceBaseService implements InitializingBean {
                 System.out.println("The DeleteResults were null");
             }
             
-            // Return the cumulative results
-            return cumulativeResults as DeleteResult[]
         }
-        return null;
+        
+        // Convert to an OperationResult object
+        def results = []
+        cumulativeResults.eachWithIndex { it, idx ->
+            
+            OperationResult objResult = new OperationResult();
+            
+            objResult.setSuccess(it.success)
+            objResult.setTargetSalesforceId(it.getId()?.getID())
+            
+            if(!it.success) {
+                for( Error err : it.getErrors() ) {
+                    objResult.getErrors().add(err.getMessage())
+                } 
+            }
+            
+            results << objResult
+        }
+        
+        // Return a SF response
+        return new SalesforceResponse(results)
     }
 
+    
+    /**
+     * Overloading method that takes a list of objects
+     */
+    public SalesforceResponse delete( List objIds ) {
+        return this.delete( objIds as String[] )
+    }
 }

@@ -99,7 +99,11 @@ public class SObjectConversionUtil {
         String retVal = "";
 
         if( obj == null ) {
-          // Ignore
+          // Booleans default to False
+          if( obj instanceof Boolean ) {
+              retVal = ConverterUtil.convertToString(false);
+          }
+          // Otherwise Ignore
         }
         else if( obj instanceof Integer ) {
             retVal = ConverterUtil.convertToString( (Integer)obj );
@@ -136,23 +140,6 @@ public class SObjectConversionUtil {
         }
 
         return retVal;
-    }
-
-
-    public static
-    String getDynamicSetterForField( String fieldName ) {
-
-        fieldName = fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-
-        return "set" + fieldName;
-    }
-
-
-    public static
-    String getDynamicGetterForField( String fieldName ) {
-        fieldName = fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-
-        return "get" + fieldName;
     }
 
 }

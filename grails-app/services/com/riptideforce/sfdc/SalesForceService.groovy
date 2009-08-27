@@ -115,43 +115,133 @@ class SalesForceService extends SalesForceBaseService {
      * Creates a set of new objects in salesforce.
      * The objects must be mapped as Salesforce objects.
      */
-    public SaveResult[] createObjects( Object ... objs ) {
+    public SalesforceResponse createObjects( Object ... objs ) {
 
         SObject[] sObjs = new SObject[objs.length]
-        int idx = 0;
 
-        objs.each { obj ->
+        objs.eachWithIndex { obj, idx ->
 
             SalesforceObject objAnnot = obj.getClass().getAnnotation( SalesforceObject.class )
 
             if( objAnnot == null ) {
                 throw new RuntimeException("One of the provided objects is not mapped to Salesforce")
             }
-            sObjs[idx++] = this.buildSObjectForCreation(obj)
+            sObjs[idx] = this.buildSObjectForCreation(obj)
         }
 
-        return create( sObjs )
+        SaveResult[] res = create( sObjs )
+        
+        // Convert to an OperationResult object
+        def results = []
+        res.eachWithIndex { it, idx ->
+            
+            // Update the target object with the appropriate salesforce Id
+            objs[idx].setId( it.getId()?.getID() )
+            
+            OperationResult objResult = new OperationResult();
+            
+            objResult.setSuccess(it.success)
+            objResult.setTargetSalesforceId(it.getId()?.getID())
+            objResult.setSalesforceObject(objs[idx])
+            
+            if(!it.success) {
+                for( Error err : it.getErrors() ) {
+                    objResult.getErrors().add(err.getMessage())
+                } 
+            }
+            
+            results << objResult
+        }
+        
+        // Return a global response
+        return new SalesforceResponse(results)
     }
+    
+    
+    /**
+     * Overloading method that takes a list of objects
+     */
+    public SalesforceResponse createObjects( List objs ) {
+        return this.createObjects( objs as Object[] )
+    }
+    
 
     /**
      * Updates a set of objects in salesforce.
      * The objects must be mapped as Salesforce objects.
      */
-    public SaveResult[] updateObjects( Object ... objs ) {
+    public SalesforceResponse updateObjects( Object ... objs ) {
 
         SObject[] sObjs = new SObject[objs.length]
-        int idx = 0;
 
-        objs.each { obj ->
+        objs.eachWithIndex { obj, idx ->
             SalesforceObject objAnnot = obj.getClass().getAnnotation( SalesforceObject.class )
 
             if( objAnnot == null ) {
                 throw new RuntimeException("One of the provided objects is not mapped to Salesforce")
             }
-            sObjs[idx++] = this.buildSObjectForUpdate(obj)
+            sObjs[idx] = this.buildSObjectForUpdate(obj)
         }
 
-        return update( sObjs )
+        SaveResult[] res = update( sObjs )
+        
+        // Convert to an OperationResult object
+        def results = []
+        res.eachWithIndex { it, idx ->
+            
+            OperationResult objResult = new OperationResult();
+            
+            objResult.setSuccess(it.success)
+            objResult.setTargetSalesforceId(it.getId()?.getID())
+            objResult.setSalesforceObject(objs[idx])
+            
+            if(!it.success) {
+                for( Error err : it.getErrors() ) {
+                    objResult.getErrors().add(err.getMessage())
+                } 
+            }
+            
+            results << objResult
+        }
+        
+        // Return a global response
+        return new SalesforceResponse(results)
+    }
+    
+    
+    /**
+     * Overloading method that takes a list of objects
+     */
+    public SalesforceResponse updateObjects( List objs ) {
+        return this.updateObjects( objs as Object[] )
+    }
+    
+    
+    
+    /**
+     * Validates that the object is ready to be sent to salesforce
+     */
+    public ValidationResult validate( Object obj ) {
+        
+        SalesforceObject objAnnot = obj.getClass().getAnnotation( SalesforceObject.class )
+        ValidationResult valRes = new ValidationResult();
+
+        if( objAnnot == null ) {
+            throw new RuntimeException("The provided object for validation is not mapped to Salesforce")
+        }
+        else {
+            // For all declared fields
+            obj.getClass().getDeclaredFields().each { field ->
+                SalesforceField sfAnnotation = field.getAnnotation(SalesforceField.class)
+
+                if( sfAnnotation != null ) {
+                    // if the field is required yet not provided
+                    if( sfAnnotation.required() && obj."${field.name}" == null ) {
+                        valRes.addMessage( field.name, "${field.name} is required by the Salesforce org." )
+                    }
+                }
+            }
+        }
     }
 
 
@@ -189,8 +279,7 @@ class SalesForceService extends SalesForceBaseService {
             try {
                 // find the setter and the argument type
                 Class elemType = matchingField.getType()
-                String setter = SObjectConversionUtil.getDynamicSetterForField(matchingField.getName());
-                object."${setter}"(SObjectConversionUtil.convertToJavaType( elem.getText(), elemType ))
+                object."${matchingField.getName()}" = SObjectConversionUtil.convertToJavaType( elem.getText(), elemType )
             }
             catch(NoSuchMethodException nsmex) {
                 // The plugin classes might be out of date
@@ -223,18 +312,12 @@ class SalesForceService extends SalesForceBaseService {
             if( sfAnnotation != null ) {
                 if( sfAnnotation.createable() ) {
 
-                    String getter = SObjectConversionUtil.getDynamicGetterForField(field.getName());
-
                     // get the value
-                    Object fieldVal = obj."${getter}"()
+                    Object fieldVal = obj."${field.getName()}"
                     String fieldName = sfAnnotation.name()
 
-                    // if the field is null
-                    if( fieldVal == null ) {
-                        sObj.addFieldsToNull( fieldName );
-                    }
-                    // otherwise
-                    else {
+                    // if the field is not null, set it on the SObject
+                    if( fieldVal != null ) {
                         OMElement newElem =
                             fac.createOMElement(fieldName,
                                 fac.createOMNamespace("urn:sobject.partner.soap.sforce.com", "ns2"));
@@ -270,10 +353,8 @@ class SalesForceService extends SalesForceBaseService {
                 if( sfAnnotation.isId() ) {
                     ID objId = new ID();
 
-                    String getter = SObjectConversionUtil.getDynamicGetterForField(field.getName());
-
                     // get the value
-                    Object fieldVal = obj."${getter}"()
+                    Object fieldVal = obj."${field.getName()}"
 
                     // set it on the sObject
                     objId.setID( fieldVal );
@@ -282,10 +363,8 @@ class SalesForceService extends SalesForceBaseService {
                 // Updateable field
                 else if( sfAnnotation.updateable() ) {
 
-                    String getter = SObjectConversionUtil.getDynamicGetterForField(field.getName());
-
                     // get the value
-                    Object fieldVal = obj."${getter}"()
+                    Object fieldVal = obj."${field.getName()}"
                     String fieldName = sfAnnotation.name()
 
                     // if the field is null

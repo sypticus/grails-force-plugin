@@ -84,7 +84,8 @@ class SalesForceCodeGenService extends SalesForceBaseService {
             // Create a new file based on the template and the binding below
             def binding = [TYPE_NAME: type,
                            PACKAGE: pkg,
-                           TYPE_DESC: typeDesc ]
+                           TYPE_DESC: typeDesc,
+                           IS_DOMAIN_CLASS: generateDomainClass]
 
             def pkgToDir = pkg.replace('.' as char, File.separatorChar)
 
@@ -98,6 +99,13 @@ class SalesForceCodeGenService extends SalesForceBaseService {
             String classFileName =
                 pluginBasedir + File.separator + "src" + File.separator + "groovy" + File.separator +
                 pkgToDir + File.separator + gClassName + ".groovy"
+                
+            // If it is a domain class, generate in the apps domain class dir
+            if(generateDomainClass) {
+                classFileName = 
+                    appDir + File.separator + "grails-app" + File.separator + "domain" + File.separator +
+                    pkgToDir + File.separator + gClassName + ".groovy"
+            }
 
 
             // print the file
@@ -106,24 +114,6 @@ class SalesForceCodeGenService extends SalesForceBaseService {
             }
             catch( Exception ex ) {
                 System.out.println("Error generating file: " + ex.getMessage())
-            }
-
-
-            // Generate the Domain class if so requested
-            if(generateDomainClass) {
-                templateFileName = "${pluginBasedir}${File.separator}grails-app${File.separator}templates" +
-                    File.separator + "SforceDomainObject.tmpl"
-                classFileName =
-                    "${appDir}${File.separator}grails-app${File.separator}domain${File.separator}" +
-                    "${pkgToDir}${File.separator}SF${gClassName}.groovy"
-
-                // print the file
-                try {
-                    this.applyTemplate(binding, templateFileName, classFileName)
-                }
-                catch( Exception ex ) {
-                    System.out.println("Error generating Domain class file: " + ex.getMessage())
-                }
             }
 
         }
@@ -173,7 +163,8 @@ class SalesForceCodeGenService extends SalesForceBaseService {
             // Create a new file based on the template and the binding below
             def binding = [TYPE_NAME: type,
                            PACKAGE: pkg,
-                           TYPE_DESC: typeDesc ]
+                           TYPE_DESC: typeDesc,
+                           IS_DOMAIN_CLASS: generateDomainClass]
 
             // Get the class template
             def templateFileName = "${pluginBasedir}${File.separator}grails-app${File.separator}templates" +
@@ -191,6 +182,13 @@ class SalesForceCodeGenService extends SalesForceBaseService {
             String classFileName =
                 pluginBasedir + File.separator + "src" + File.separator + "groovy" + File.separator +
                 pkgToDir + File.separator + gClassName + ".groovy"
+                
+            // If it is a domain class, generate in the apps domain class dir
+            if(generateDomainClass) {
+                classFileName = 
+                    appDir + File.separator + "grails-app" + File.separator + "domain" + File.separator +
+                    pkgToDir + File.separator + gClassName + ".groovy"
+            }
 
 
             // print the file
@@ -201,23 +199,6 @@ class SalesForceCodeGenService extends SalesForceBaseService {
                 System.out.println("Error generating file: " + ex.getMessage())
             }
 
-
-            // Generate the Domain class if so requested
-            if(generateDomainClass) {
-                templateFileName = "${pluginBasedir}${File.separator}grails-app${File.separator}templates" +
-                    File.separator + "SforceDomainObject.tmpl"
-                classFileName =
-                    "${appDir}${File.separator}grails-app${File.separator}domain${File.separator}" +
-                    "${pkgToDir}${File.separator}SF${gClassName}.groovy"
-
-                // print the file
-                try {
-                    this.applyTemplate(binding, templateFileName, classFileName)
-                }
-                catch( Exception ex ) {
-                    System.out.println("Error generating Domain class file: " + ex.getMessage())
-                }
-            }
 
         }
         // Otherwise, it was not found

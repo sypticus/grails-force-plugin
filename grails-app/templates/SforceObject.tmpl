@@ -14,6 +14,7 @@ package ${PACKAGE}
 import com.sforce.soap.partner.*
 import com.sforce.soap.partner.sobject.SObject
 import org.apache.axiom.om.*
+import com.riptideforce.sfdc.domain.*
 import com.riptideforce.sfdc.metadata.*
 import com.riptideforce.sfdc.soap.util.SObjectConversionUtil
 
@@ -23,8 +24,22 @@ import java.lang.reflect.*
 class ${className} implements java.io.Serializable {
 
 <%
+if(IS_DOMAIN_CLASS) {
+%>
+    Long pk
+
+    static mapping = {
+        // Override the generated pk as the Salesforce object may already have one
+        id name:'pk', column:'pk', type:'long'
+    }
+<%
+}
+%>
+
+<%
 // Field to type map
-def typeMap = [:];
+def typeMap = [:]
+def picklistFields = []
 
 for( field in TYPE_DESC.getFields() ) {
 
@@ -44,6 +59,8 @@ for( field in TYPE_DESC.getFields() ) {
             gFieldName = newFieldName
         }
     }
+    
+    gFieldName = gFieldName.substring(0,1).toLowerCase() + gFieldName.substring(1)
 
     String fieldType
 
@@ -88,13 +105,32 @@ for( field in TYPE_DESC.getFields() ) {
     boolean createable = field.getCreateable();
     boolean updateable = field.getUpdateable();
     boolean isId = (field.getName().equals("Id"));
+    boolean required = !field.getNillable();
+    
+    // Add the field to the map of picklist fields
+    if(field.getType().getValue() == "multipicklist" ) {
+        picklistFields << gFieldName
+    }
 
 %>
-    @SalesforceField( name="${field.getName()}", createable=${createable}, updateable=${updateable}, isId=${isId} )
+    @SalesforceField( name="${field.getName()}", createable=${createable}, updateable=${updateable}, isId=${isId}, required=${required} )
     ${fieldType} ${gFieldName}
 <%
 }
 %>
+
+<%
+if( IS_DOMAIN_CLASS ) {
+    def hasManyMappingStrings = []
+    picklistFields.each {
+        hasManyMappingStrings << "${it}:String"
+    }
+%>
+    static hasMany = [${hasManyMappingStrings.join(", ")}]
+<%
+}
+%>
+
 
 <%
 for( field in TYPE_DESC.getFields() ) {
@@ -146,10 +182,8 @@ for( field in TYPE_DESC.getFields() ) {
 
             if( field.getAnnotation(SalesforceField.class) != null ) {
 
-                String getter = SObjectConversionUtil.getDynamicGetterForField(field.getName());
-
                 // get the value
-                Object fieldVal = this."\${getter}"()
+                Object fieldVal = this."\${field.getName()}"
                 String fieldName = field.getName()
 
                 strVal += fieldName + ": " + fieldVal + "\\n"

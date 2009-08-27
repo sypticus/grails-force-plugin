@@ -2,7 +2,7 @@ package com.riptideforce.sfdc
 
 import com.riptideforce.sfdc.*
 import com.sforce.soap.partner.*
-
+import org.codehaus.groovy.grails.commons.ConfigurationHolderimport grails.util.GrailsUtil
 class SalesForceBaseServiceTests extends GroovyTestCase {
 
     static transactional = false;
@@ -20,14 +20,15 @@ class SalesForceBaseServiceTests extends GroovyTestCase {
         tst1.setOwnerId( salesForceService.getUserId() )
         tst1.setColor("Red")
         tst1.setUses(["Home", "Office"])
+        tst1.number = new Double(23);
 
 
         // Create
-        SaveResult[] res = salesForceService.createObjects( tst1 )
-        for( SaveResult r : res ) {
+        SalesforceResponse response = salesForceService.createObjects( [tst1] )
+        for( r in response.getAllResults() ) {
             println r.getSuccess()
-            for( Error err : r.getErrors() ) {
-                println err.getMessage()
+            for( String err : r.getErrors() ) {
+                println err
             }
         }
     }*/
@@ -45,38 +46,42 @@ class SalesForceBaseServiceTests extends GroovyTestCase {
 
         }
 
-        SaveResult[] res = salesForceService.updateObjects( updatedObjs )
-        for( SaveResult r : res ) {
+        SalesforceResponse response = salesForceService.updateObjects( updatedObjs )
+        for( r in response.getAllResults() ) {
             println r.getSuccess()
-            for( Error err : r.getErrors() ) {
-                println err.getMessage()
+            for( String err : r.getErrors() ) {
+                println err
             }
         }
     }*/
 
-    /*void testDelete() {
+    void testDelete() {
         def objs = salesForceService. getAllObjects(TestObject.class, "Name = 'Object 1' OR Name = 'Object 2'")
         String[] idsToRemove = new String[ objs.size() ]
+        def idsList = []
 
         objs.eachWithIndex { obj, idx ->
             idsToRemove[idx] = obj.getId()
+            idsList << obj.getId()
         }
 
         // Delete
-        DeleteResult[] res = salesForceService.delete( idsToRemove )
-        for( DeleteResult r : res ) {
+        SalesforceResponse response = salesForceService.delete( idsList )
+        for( r in response.getAllResults() ) {
             println r.getSuccess()
-            for( Error err : r.getErrors() ) {
-                println err.getMessage()
+            for( String err : r.getErrors() ) {
+                println err
             }
         }
-    }*/
+    }
 
 
     /*void testBatchCreate() {
 
         def objs = []
 
+        def env = GrailsUtil.getEnvironment()
+        
         for(i in 1..300) {
             TestObject tst1 = new TestObject()
 
@@ -92,11 +97,11 @@ class SalesForceBaseServiceTests extends GroovyTestCase {
         }
 
         // Create
-        SaveResult[] res = salesForceService.createObjects( objs as Object[] )
-        for( SaveResult r : res ) {
+        SalesforceResponse response = salesForceService.createObjects( objs as Object[] )
+        for( r in response.getAllResults() ) {
             println r.getSuccess()
-            for( Error err : r.getErrors() ) {
-                println err.getMessage()
+            for( String err : r.getErrors() ) {
+                println err
             }
         }
     }*/
@@ -110,11 +115,11 @@ class SalesForceBaseServiceTests extends GroovyTestCase {
             it.setName( it.getName() + " Modified" )
         }
 
-        SaveResult[] res = salesForceService.updateObjects( objs as Object[] )
-        for( SaveResult r : res ) {
+        SalesforceResponse response = salesForceService.updateObjects( objs as Object[] )
+        for( r in response.getAllResults() ) {
             println r.getSuccess()
-            for( Error err : r.getErrors() ) {
-                println err.getMessage()
+            for( String err : r.getErrors() ) {
+                println err
             }
         }
 
@@ -133,11 +138,11 @@ class SalesForceBaseServiceTests extends GroovyTestCase {
 
 
         // Delete
-        DeleteResult[] res = salesForceService.delete( ids as String[] )
-        for( DeleteResult r : res ) {
+        SalesforceResponse response = salesForceService.delete( ids as String[] )
+        for( r in response.getAllResults() ) {
             println r.getSuccess()
-            for( Error err : r.getErrors() ) {
-                println err.getMessage()
+            for( String err : r.getErrors() ) {
+                println err
             }
         }
     }*/
@@ -161,10 +166,10 @@ class SalesForceBaseServiceTests extends GroovyTestCase {
         sfTst.save(flush:true)
     }*/
 
-    void testProperties() {
+    /*void testProperties() {
 
         def objs = salesForceService.getAllObjects(com.riptideforce.sfdc.Property.class)
 
         salesForceService.updateObjects( objs[1] )
-    }
+    }*/
 }

@@ -18,12 +18,22 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface SalesforceField {
 
+    /** Actual Salesforce field name mapped */
     String name();
 
+    /** Field can be set on create */
     boolean createable() default false;
 
+    /** Field can be changed on update */
     boolean updateable() default false;
 
+    /** Field is the object's Id */
     boolean isId() default false;
+    
+    /** Field is required */
+    boolean required() default false;
+    
+    /** Default Value */
+    String defaultValue() default "";
 
 }

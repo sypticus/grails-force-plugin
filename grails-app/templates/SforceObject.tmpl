@@ -24,22 +24,10 @@ import java.lang.reflect.*
 class ${className} implements java.io.Serializable {
 
 <%
-if(IS_DOMAIN_CLASS) {
-%>
-    Long pk
-
-    static mapping = {
-        // Override the generated pk as the Salesforce object may already have one
-        id name:'pk', column:'pk', type:'long'
-    }
-<%
-}
-%>
-
-<%
 // Field to type map
 def typeMap = [:]
 def picklistFields = []
+def nillableFields = []
 
 for( field in TYPE_DESC.getFields() ) {
 
@@ -69,7 +57,7 @@ for( field in TYPE_DESC.getFields() ) {
         case "string":
             fieldType = "String"
             break
-		case "int":
+        case "int":
             fieldType = "Integer"
             break
         case "double":
@@ -107,9 +95,19 @@ for( field in TYPE_DESC.getFields() ) {
     boolean isId = (field.getName().equals("Id"));
     boolean required = !field.getNillable();
     
+    // Change the Id field for domain classes
+    if( IS_DOMAIN_CLASS && isId ) {
+        gFieldName = 'salesforceId'
+    }
+    
     // Add the field to the map of picklist fields
     if(field.getType().getValue() == "multipicklist" ) {
         picklistFields << gFieldName
+    }
+    
+    // Add the field to the collection of nillable fields
+    if(field.getNillable() || !field.getCreateable()) {
+        nillableFields << gFieldName
     }
 
 %>
@@ -125,9 +123,23 @@ if( IS_DOMAIN_CLASS ) {
     picklistFields.each {
         hasManyMappingStrings << "${it}:String"
     }
+    
+    if(picklistFields.size > 0) {
 %>
     static hasMany = [${hasManyMappingStrings.join(", ")}]
 <%
+    }
+    
+    
+    def constraintMappingStrings = []
+    
+    if( nillableFields.size > 0 ) {
+        println "    static constraints = {"
+        nillableFields.each {
+            println "        ${it}(nullable:true)"
+        }
+        println "    }"  
+    }
 }
 %>
 

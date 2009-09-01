@@ -4,7 +4,8 @@ import com.sforce.soap.partner.*
 import org.springframework.beans.factory.InitializingBean
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import com.sforce.soap.partner.sobject.SObject
-import grails.util.GrailsUtil
+import grails.util.GrailsUtil
+
 
 class SalesForceBaseService implements InitializingBean {
 
@@ -13,6 +14,7 @@ class SalesForceBaseService implements InitializingBean {
 
     def String userName
     def String password
+    def boolean isSandbox = false
     def SforceServiceStub serviceStub
     def SessionHeader sessionHeader
     def GetUserInfoResult userInfo
@@ -34,6 +36,10 @@ class SalesForceBaseService implements InitializingBean {
             else {
                 this.loginThreshold = 3600000
             }
+            
+            if( ConfigurationHolder.config.salesforce."${env}".sandbox ) {
+                this.isSandbox = ConfigurationHolder.config.salesforce."${env}".sandbox
+            }
         }
         // Otherwise, check for the absolute configuration 
         // (Deprecated. Only for backwards compatibility)
@@ -45,6 +51,10 @@ class SalesForceBaseService implements InitializingBean {
             }
             else {
                 this.loginThreshold = 3600000
+            }
+            
+            if( ConfigurationHolder.config.salesforce.sandbox ) {
+                this.isSandbox = ConfigurationHolder.config.salesforce.sandbox
             }
         }
     }
@@ -87,7 +97,13 @@ class SalesForceBaseService implements InitializingBean {
      */
     protected boolean login() {
 
-        this.serviceStub = new SforceServiceStub();
+        if(this.isSandbox) {
+            this.serviceStub = new SforceServiceStub("https://test.salesforce.com/services/Soap/u/16.0");
+        }
+        else {
+            this.serviceStub = new SforceServiceStub();
+        }
+        
         Login login = new Login();
         login.setUsername( this.userName );
         login.setPassword( this.password );
@@ -119,15 +135,15 @@ class SalesForceBaseService implements InitializingBean {
         }
         catch( InvalidIdFault flt ) {
             System.out.println("InvalidIdFault caught while attempting to log into SalesForce.");
-            System.out.println(flt.getFaultMessage());
+            System.out.println(flt.getFaultMessage().getInvalidIdFault().getExceptionMessage());
         }
         catch( UnexpectedErrorFault flt ) {
             System.out.println("UnexpectedErrorFault caught while attempting to log into SalesForce.");
-            System.out.println(flt.getFaultMessage());
+            System.out.println(flt.getFaultMessage().getUnexpectedErrorFault().getExceptionMessage());
         }
         catch( LoginFault flt ) {
             System.out.println("LoginFault caught while attempting to log into SalesForce.");
-            System.out.println(flt.getFaultMessage());
+            System.out.println(flt.getFaultMessage().getLoginFault().getExceptionMessage());
         }
 
         return loggedIn;
@@ -507,7 +523,7 @@ class SalesForceBaseService implements InitializingBean {
      * Deletes a series of SObjects given multiple Ids
      */
     public SalesforceResponse delete(String ... ids){
-	    if (this.loginRequired()) {
+        if (this.loginRequired()) {
             if (!login()) {
                 return;
             }

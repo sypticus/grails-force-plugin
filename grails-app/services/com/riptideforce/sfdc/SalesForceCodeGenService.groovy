@@ -97,7 +97,7 @@ class SalesForceCodeGenService extends SalesForceBaseService {
 
             // Build the class file path
             String classFileName =
-                pluginBasedir + File.separator + "src" + File.separator + "groovy" + File.separator +
+                appDir + File.separator + "src" + File.separator + "groovy" + File.separator +
                 pkgToDir + File.separator + gClassName + ".groovy"
                 
             // If it is a domain class, generate in the apps domain class dir
@@ -180,7 +180,7 @@ class SalesForceCodeGenService extends SalesForceBaseService {
 
             // Build the class file path
             String classFileName =
-                pluginBasedir + File.separator + "src" + File.separator + "groovy" + File.separator +
+                appDir + File.separator + "src" + File.separator + "groovy" + File.separator +
                 pkgToDir + File.separator + gClassName + ".groovy"
                 
             // If it is a domain class, generate in the apps domain class dir

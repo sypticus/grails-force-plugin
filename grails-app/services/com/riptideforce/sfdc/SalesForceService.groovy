@@ -102,7 +102,7 @@ class SalesForceService extends SalesForceBaseService {
             }
         }
 
-    	def list = fetchAll("Select ${fieldStr} from ${objAnnot.name()} where " + whereClause)
+        def list = fetchAll("Select ${fieldStr} from ${objAnnot.name()} where " + whereClause)
 
         def returnVals = []
         list.each { object->
@@ -134,9 +134,6 @@ class SalesForceService extends SalesForceBaseService {
         // Convert to an OperationResult object
         def results = []
         res.eachWithIndex { it, idx ->
-            
-            // Update the target object with the appropriate salesforce Id
-            objs[idx].setId( it.getId()?.getID() )
             
             OperationResult objResult = new OperationResult();
             

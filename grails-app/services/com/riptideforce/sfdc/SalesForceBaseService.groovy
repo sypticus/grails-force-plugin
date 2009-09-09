@@ -15,6 +15,7 @@ class SalesForceBaseService implements InitializingBean {
     def String password
     def SforceServiceStub serviceStub
     def SessionHeader sessionHeader
+    def String sessionId
     def GetUserInfoResult userInfo
     def long lastLoginTimestamp
     def long loginThreshold
@@ -114,6 +115,21 @@ class SalesForceBaseService implements InitializingBean {
 
         return loggedIn;
     }
+    
+    
+    /**
+     * Manually sets the Session id
+     */
+    public void setSessionId( String sId ) {
+        // Create the session Header
+        this.sessionHeader = new SessionHeader();
+        sessionHeader.setSessionId(sId);
+        
+        // Inactivate the login timeout (it should be manually controlled)
+        this.lastLoginTimestamp = System.currentTimeMillis()
+        this.loginThreshold = -1
+    }
+    
     
     /*
      * Return the Session Header

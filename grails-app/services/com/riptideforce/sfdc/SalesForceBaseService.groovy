@@ -419,7 +419,7 @@ class SalesForceBaseService implements InitializingBean {
         // Return the first SObject if there are any
         if (qr != null){
             List<SObject> records = qr.getRecords();
-            if (!records.isEmpty()) {
+            if (records && !records.isEmpty()) {
                 for (SObject sobj : records) {
                     return sobj;
                 }

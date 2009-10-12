@@ -2,7 +2,9 @@ package com.riptideforce.sfdc
 
 import com.riptideforce.sfdc.*
 import com.sforce.soap.partner.*
-import org.codehaus.groovy.grails.commons.ConfigurationHolderimport grails.util.GrailsUtil
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
+import grails.util.GrailsUtil
+
 class SalesForceBaseServiceTests extends GroovyTestCase {
 
     static transactional = false;
@@ -56,7 +58,7 @@ class SalesForceBaseServiceTests extends GroovyTestCase {
     }*/
 
     void testDelete() {
-        def objs = salesForceService. getAllObjects(TestObject.class, "Name = 'Object 1' OR Name = 'Object 2'")
+        def objs = salesForceService.getAllObjects(TestObject.class, "Name = 'Object 1' OR Name = 'Object 2'")
         String[] idsToRemove = new String[ objs.size() ]
         def idsList = []
 

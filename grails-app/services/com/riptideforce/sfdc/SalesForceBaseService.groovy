@@ -376,7 +376,7 @@ class SalesForceBaseService implements InitializingBean {
             this.serviceStub.query(params, this.sessionHeader, null, null, null, null);
 
             if (response != null && response.getResult() != null){
-                return response.getResult().getRecords();
+                return response.getResult()?.getRecords();
             }
         }
         catch (Exception e) {

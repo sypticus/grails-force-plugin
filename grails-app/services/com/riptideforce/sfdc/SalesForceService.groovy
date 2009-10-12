@@ -248,6 +248,12 @@ class SalesForceService extends SalesForceBaseService {
      */
     private
     Object buildObject( Class<?> type, SObject so ) {
+
+        // Return null if there is no object given
+        if( !so ) {
+            return null;
+        }
+
         OMElement[] elems = so.getExtraElement();
         def object = type.newInstance()
         def typeFields = type.getDeclaredFields()

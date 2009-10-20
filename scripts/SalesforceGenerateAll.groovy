@@ -7,7 +7,6 @@ pluginHome = "${salesforcePluginDir}" + File.separator
 
 includeTargets << grailsScript( "Init" )
 includeTargets << new File("${pluginHome}/scripts/SalesforceInit.groovy")
-includeTargets << new File("${pluginHome}/scripts/SalesforceClean.groovy")
 
 target('default': "Default target") {
     generateAll()
@@ -16,7 +15,6 @@ target('default': "Default target") {
 target(generateAll: "Generate code for all Salesforce objects.") {
     depends(parseArguments)
     depends(initSalesforceService)
-    depends(cleanSalesforceArtifacts)
     
     // Expected Parameters
     boolean genDomainClass = false

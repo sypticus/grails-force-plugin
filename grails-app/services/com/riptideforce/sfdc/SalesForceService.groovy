@@ -48,6 +48,7 @@ class SalesForceService extends SalesForceBaseService {
         }
         return returnVals
     }
+    
 
     /**
      * Returns an object given its type and its Id.
@@ -243,8 +244,64 @@ class SalesForceService extends SalesForceBaseService {
             }
         }
     }
+    
+    
+    /**
+     * Creates a batched query that will get the objects in batches
+     * Params:
+     * whereClause - The SOQL valid where clause (without 'where') to use. This
+     *               parameter is optional. If not given, it will fetch all objects.
+     * sfdcClass - The actual Salesforce mapped class
+     */
+    public
+    BatchedQuery createBatchedQuery( Map params ) {
+        // Parse the parameters
+        def whereClause = params.whereClause
+        def sfdcClass = params.sfdcClass
+        
+        // Remap the query to the full query
+        SalesforceObject objAnnot = sfdcClass.getAnnotation( SalesforceObject.class )
 
+        if( objAnnot == null ) {
+            throw new RuntimeException("Class provided is not mapped to Salesforce")
+        }
 
+        // Get a list of the fields to retrieve
+        String fieldStr = "";
+        sfdcClass.getDeclaredFields().eachWithIndex { field, idx ->
+            if( field.getAnnotation( SalesforceField.class ) != null ) {
+                if( fieldStr != "" ) {
+                    fieldStr += ", "
+                }
+                fieldStr += field.getAnnotation( SalesforceField.class ).name()
+            }
+        }
+        
+        // BatchedQuery to return
+        BatchedQuery retVal = new BatchedQuery()
+        
+        retVal.sfdcClass = sfdcClass
+        retVal.query = "Select ${fieldStr} from ${objAnnot.name()}"
+        if( whereClause ) {
+            retVal.query += " where ${whereClause}"
+        }
+        
+        return retVal
+    }
+
+    
+    /**
+     * Gets the next batch from the batched query
+     */
+    public List nextBatch(BatchedQuery bQuery) {
+        def list = this.fetchNextBatch(bQuery)
+        
+        def returnVals = []
+        list.each { object->
+            returnVals.add(this.buildObject(bQuery.sfdcClass, object))
+        }
+        return returnVals
+    }
 
     /**
      * Build a groovy object from an SObject definition

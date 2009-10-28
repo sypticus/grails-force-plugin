@@ -1,6 +1,7 @@
 package com.riptideforce.sfdc
 
 import com.sforce.soap.partner.*
+
 import org.springframework.beans.factory.InitializingBean
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import com.sforce.soap.partner.sobject.SObject
@@ -360,7 +361,25 @@ class SalesForceBaseService implements InitializingBean {
             this.serviceStub.query(params, this.sessionHeader, null, null, null, null);
 
             if (response != null && response.getResult() != null){
-                return response.getResult().getRecords();
+                
+                // Collect all the results if it exceeds the API source limits
+                def allRecords = []
+                allRecords += response.getResult().getRecords() as List
+                boolean done = response.getResult().getDone()
+                def qLocator = response.getResult().getQueryLocator()
+                                  
+                while(!done) {
+                    QueryMore moreParams = new QueryMore()
+                    moreParams.setQueryLocator( qLocator )
+                    
+                    def moreResponse = this.serviceStub.queryMore (moreParams, sessionHeader, null, null)
+                    done = moreResponse.getResult().getDone()
+                    qLocator = moreResponse.getResult().getQueryLocator()
+                    
+                    allRecords += moreResponse.getResult().getRecords() as List
+                }
+                
+                return allRecords
             }
         }
         catch (Exception e) {
@@ -368,6 +387,59 @@ class SalesForceBaseService implements InitializingBean {
         }
         return null;
     }
+    
+    
+    /**
+     * Fetches based on a query locator. This is for batched queries.
+     * @param query Query to fetch. May be null if a query locator is being provided
+     * @param locator The locator where to start searching (null if this is the first batch)
+     */
+    protected List<SObject> fetchNextBatch(BatchedQuery batch) {
+        
+        if (this.loginRequired()) {
+            if (!login()) {
+                return null;
+            }
+        }
+
+        // The locator or the query must be provided
+        if ( batch.query == null && batch.currentQueryLocator == null){
+            throw new RuntimeException("Either a QueryLocator or a Salesforce query must be provided")
+        }
+        // If the query is given, and the not the locator
+        else if( batch.query != null && batch.currentQueryLocator == null ) {
+            println "FetchBatch Query: " + batch.query
+
+            Query params = new Query()
+            params.setQueryString(batch.query)
+
+            QueryResponse response =
+            this.serviceStub.query(params, this.sessionHeader, null, null, null, null);
+            
+            // Update the batched query
+            batch.currentQueryLocator = response.getResult().getQueryLocator()
+            batch.done = response.getResult().getDone()
+            
+            return response.getResult().getRecords() as List
+        }
+        // Otherwise, the query locator is given
+        else {
+            QueryMore moreParams = new QueryMore()
+            moreParams.setQueryLocator( batch.currentQueryLocator )
+            
+            QueryMoreResponse moreResponse = 
+                this.serviceStub.queryMore (moreParams, sessionHeader, null, null)
+                
+            // Update the batched query
+            batch.currentQueryLocator = moreResponse.getResult().getQueryLocator()
+            batch.done = moreResponse.getResult().getDone()
+            
+            return moreResponse.getResult().getRecords() as List
+        }
+        
+        
+    }
+
 
     /*
      * Fetch a single object. If more than one is specified for the query,

@@ -18,6 +18,7 @@ class SalesForceBaseService implements InitializingBean {
     def boolean isSandbox = false
     def SforceServiceStub serviceStub
     def SessionHeader sessionHeader
+    def String sessionId
     def GetUserInfoResult userInfo
     def long lastLoginTimestamp
     def long loginThreshold
@@ -149,6 +150,21 @@ class SalesForceBaseService implements InitializingBean {
 
         return loggedIn;
     }
+    
+    
+    /**
+     * Manually sets the Session id
+     */
+    public void setSessionId( String sId ) {
+        // Create the session Header
+        this.sessionHeader = new SessionHeader();
+        sessionHeader.setSessionId(sId);
+        
+        // Inactivate the login timeout (it should be manually controlled)
+        this.lastLoginTimestamp = System.currentTimeMillis()
+        this.loginThreshold = -1
+    }
+    
     
     /*
      * Return the Session Header
@@ -475,7 +491,7 @@ class SalesForceBaseService implements InitializingBean {
         // Return the first SObject if there are any
         if (qr != null){
             List<SObject> records = qr.getRecords();
-            if (!records.isEmpty()) {
+            if (records && !records.isEmpty()) {
                 for (SObject sobj : records) {
                     return sobj;
                 }

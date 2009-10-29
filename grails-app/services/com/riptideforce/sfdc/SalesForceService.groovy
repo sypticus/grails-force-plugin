@@ -40,11 +40,12 @@ class SalesForceService extends SalesForceBaseService {
             }
         }
 
-        def list = fetchAll("Select ${fieldStr} from ${objAnnot.name()}")
+        def query = this.createBatchedQuery(sfdcClass:type)
 
         def returnVals = []
-        list.each { object->
-            returnVals.add(this.buildObject(type, object))
+        while( !query.isDone() ) {
+            def batch = this.nextBatch( query )
+            returnVals += batch
         }
         return returnVals
     }
@@ -103,11 +104,12 @@ class SalesForceService extends SalesForceBaseService {
             }
         }
 
-        def list = fetchAll("Select ${fieldStr} from ${objAnnot.name()} where " + whereClause)
+        def query = this.createBatchedQuery(sfdcClass:type)
 
         def returnVals = []
-        list.each { object->
-            returnVals.add(this.buildObject(type, object))
+        while( !query.isDone() ) {
+            def batch = this.nextBatch( query )
+            returnVals += batch
         }
         return returnVals
     }

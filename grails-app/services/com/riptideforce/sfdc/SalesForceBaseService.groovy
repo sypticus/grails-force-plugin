@@ -380,7 +380,9 @@ class SalesForceBaseService implements InitializingBean {
                 
                 // Collect all the results if it exceeds the API source limits
                 def allRecords = []
-                allRecords += response.getResult().getRecords() as List
+                if( response.getResult().getRecords() != null ) {
+                    allRecords += response.getResult().getRecords() as List
+                }
                 boolean done = response.getResult().getDone()
                 def qLocator = response.getResult().getQueryLocator()
                                   
@@ -435,8 +437,14 @@ class SalesForceBaseService implements InitializingBean {
             // Update the batched query
             batch.currentQueryLocator = response.getResult().getQueryLocator()
             batch.done = response.getResult().getDone()
-            
-            return response.getResult().getRecords() as List
+
+            // check for empty results
+            if( response.getResult().getRecords() != null ) {
+                return response.getResult().getRecords() as List
+            }
+            else {
+                return []
+            }
         }
         // Otherwise, the query locator is given
         else {
@@ -449,8 +457,14 @@ class SalesForceBaseService implements InitializingBean {
             // Update the batched query
             batch.currentQueryLocator = moreResponse.getResult().getQueryLocator()
             batch.done = moreResponse.getResult().getDone()
-            
-            return moreResponse.getResult().getRecords() as List
+
+            // check for empty results
+            if( moreResponse.getResult().getRecords() != null ) {
+                return moreResponse.getResult().getRecords() as List
+            }
+            else {
+                return []
+            }
         }
         
         

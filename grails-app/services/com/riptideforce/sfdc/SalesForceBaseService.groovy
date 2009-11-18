@@ -12,6 +12,8 @@ class SalesForceBaseService implements InitializingBean {
 
     /** Maximim number of updateable objects in a single call */
     private static final int BATCH_UPDATE_LIMIT = 200;
+    /** Maximum number of retrievable objects in a single call */
+    private static final int BATCH_RETRIEVE_LIMIT = 2000;
 
     def String userName
     def String password
@@ -688,5 +690,106 @@ class SalesForceBaseService implements InitializingBean {
      */
     public SalesforceResponse delete( List objIds ) {
         return this.delete( objIds as String[] )
+    }
+    
+    
+    /**
+     * Retrieves a set of SObjects given their ids
+     * @param fieldList comma separated list of fields to retrieve.
+     * @param sObjectType The name of the Salesforce class to retrieve.
+     * @param objIds The list of object Ids.
+     */
+    protected List retrieve( String fieldList, String sfTypeName, List objIds ) {
+        
+        if( sfTypeName == null ) {
+            throw new RuntimeException( "Salesforce Type may not be null on a retrieve call." )
+        }
+        else if( objIds == null || objIds.size == 0 ) {
+            // Return an empty list if no ids are provided
+            return []
+        }
+        
+        if (this.loginRequired()) {
+            if (!login()) {
+                return null;
+            }
+        }        
+        
+        // Segment the call if the API limits are reached
+        def segments = this.segment(objIds as String[], BATCH_RETRIEVE_LIMIT)
+        def cumulativeResults = []
+
+        segments.each { segment ->
+            
+            // Call arguments
+            Retrieve retrieveParams = new Retrieve()
+            retrieveParams.setFieldList(fieldList)
+            retrieveParams.setSObjectType(sfTypeName)
+            segment.each {
+                ID newId = new ID()
+                newId.setID(it)
+                retrieveParams.addIds(newId)
+            }
+            
+            RetrieveResponse response =
+                this.serviceStub.retrieve(retrieveParams, this.sessionHeader, null, null, null, null)
+            
+            SObject[] results = response.getResult()
+            cumulativeResults += results as List
+        }
+        
+        return cumulativeResults
+    }
+    
+    
+    /**
+     * Retrieves the Ids of a set of updated objects within a given time frame.
+     * @param sfTypeName The name of the Salesforce class to retrieve.
+     * @param startDate The start date of the time period to check.
+     * @param endDate The end date of the time period to check.
+     * 
+     * NOTE: Check the Salesforce API documentation for Rules and Guidelines 
+     * pertinent to this call. If more than 200,000 results are returned, the API
+     * will throw an exception.
+     */
+    protected List getUpdated( String sfTypeName, Calendar startDate, Calendar endDate ) {
+        
+        if( sfTypeName == null ) {
+            throw new RuntimeException( "Salesforce Type may not be null on a getUpdated call." )
+        }
+        else if( startDate == null ) {
+            throw new RuntimeException( "Start Date may not be null on a getUpdated call." )
+        }
+        
+        if( endDate == null ) {
+            // default to today
+            endDate = new GregorianCalendar()
+        }
+        
+        // login if needed
+        if (this.loginRequired()) {
+            if (!login()) {
+                return null;
+            }
+        }
+        
+        // Call Parameters
+        GetUpdated updatedParams = new GetUpdated()
+        updatedParams.setSObjectType(sfTypeName)
+        updatedParams.setStartDate(startDate)
+        updatedParams.setEndDate(endDate)
+        
+        // make the call
+        GetUpdatedResponse response =
+            this.serviceStub.getUpdated(updatedParams, this.sessionHeader, null)
+
+        // parse the results
+        ID[] ids = response.getResult().getIds()
+        def idList = []
+        ids.each {
+            idList << it.getID()
+        }
+        
+        return idList
     }
 }

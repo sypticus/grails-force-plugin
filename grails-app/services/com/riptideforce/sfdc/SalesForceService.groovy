@@ -78,6 +78,42 @@ class SalesForceService extends SalesForceBaseService {
         String idStr = "'${id}'"
         return this.buildObject( type, fetch("Select ${fieldStr} from ${objAnnot.name()} where ID = ${idStr}") )
     }
+    
+    /**
+     * Returns multiple objects by their Id
+     */
+    public
+    List getObjectsById( Class<?> type, List ids ) {
+        
+        SalesforceObject objAnnot = type.getAnnotation( SalesforceObject.class )
+        
+        if( objAnnot == null ) {
+            throw new RuntimeException("Class provided is not mapped to Salesforce")
+        }
+        
+        // Get a list of the fields to retrieve
+        String fieldStr = "";
+        
+        def fields = []
+        type.getDeclaredFields().each { field ->
+            if( field.getAnnotation( SalesforceField.class ) != null ) {
+                fields << field.getAnnotation( SalesforceField.class ).name()
+            }
+        }
+        fieldStr = fields.join(", ")
+
+        // Retrieve the SObjects by Id
+        List sObjects = this.retrieve(fieldStr, objAnnot.name(), ids)
+        
+        // Build the plugin objects
+        def retVal = []
+        sObjects.each {
+            retVal << this.buildObject(type, it)
+        }
+        
+        return retVal
+    }
+    
 
     /**
      * Returns all objects for a given class that comply with the provided
@@ -301,6 +337,41 @@ class SalesForceService extends SalesForceBaseService {
         }
         return returnVals
     }
+    
+    
+    /**
+     * Get the Updated objects within a time frame.
+     * @param startDate Either a Calendar or Date object. Required
+     * @param endDate Either a Calendar or Date object. If not given, defaults to
+     * the system's current Date.
+     */
+    public List getUpdatedObjects(Class<?> type, def startDate, def endDate) {
+        
+        SalesforceObject objAnnot = type.getAnnotation( SalesforceObject.class )
+        
+        if( objAnnot == null ) {
+            throw new RuntimeException("Class provided is not mapped to Salesforce")
+        }
+        
+        // Convert the dates to calendars if needed
+        if( startDate != null && startDate instanceof Date ) {
+            Calendar tmpCal = new GregorianCalendar()
+            tmpCal.setTime(startDate)
+            startDate = tmpCal
+        }
+        if( endDate != null && endDate instanceof Date ) {
+            Calendar tmpCal = new GregorianCalendar()
+            tmpCal.setTime(endDate)
+            endDate = tmpCal
+        }
+        
+        // Call the service to retrieve the updated Ids
+        def objIds = this.getUpdated(objAnnot.name(), startDate, endDate)
+        
+        // retrieve the objects using the Ids
+        return this.getObjectsById(type, objIds)
+    }
+    
 
     /**
      * Build a groovy object from an SObject definition

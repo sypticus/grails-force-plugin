@@ -140,7 +140,7 @@ class SalesForceService extends SalesForceBaseService {
             }
         }
 
-        def query = this.createBatchedQuery(sfdcClass:type)
+        def query = this.createBatchedQuery('whereClause':whereClause, sfdcClass:type)
 
         def returnVals = []
         while( !query.isDone() ) {
